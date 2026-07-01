@@ -61,19 +61,42 @@ function selectDeviceType(typeName) {
   alert(`Выбран ремонт: ${typeName}. Логика квиза сработает здесь.`);
 }
 
-// Отправка первичного текста поломки из инпута на главном экране
 function startQuizFromHero() {
-  const problemText = document.getElementById('initial-problem').value.trim();
+  // 1. Забираем текст из инпута на главном экране
+  const heroInput = document.getElementById('initial-problem');
+  if (!heroInput) return;
+
+  const problemText = heroInput.value.trim();
+
   if (problemText === "") {
-    alert("Напишите, что у вас сломалось!");
+    alert("Пожалуйста, опишите коротко, что нужно починить!");
     return;
   }
-  draftOrder.initialProblem = problemText;
-  console.log("Черновик обновлен (Проблема):", draftOrder);
+
+  // 2. Записываем в наш единый глобальный объект квиза
+  quizDraftOrder.initialProblem = problemText;
   
-  // Логика перехода к шагу с брендами
+  // Устанавливаем источник, чтобы в админке было видно, откуда пришел лид
+  quizDraftOrder.source = "Главный экран (Инпут)";
+
+  // ЛАЙФХАК: Синхронизируем текст с текстовым полем внутри квиза на Шаге 2, 
+  // чтобы функция submitQuizStep2() потом случайно не затерла его пустотой!
+  const quizTextarea = document.getElementById('quiz-problem-textarea');
+  if (quizTextarea) {
+    quizTextarea.value = problemText;
+  }
+
+  // 3. Выводим ваше сообщение и открываем квиз
   alert(`Проблема "${problemText}" записана! Переходим к выбору бренда.`);
+  
+  // Открываем модальное окно квиза
+  if (typeof openQuizModal === "function") {
+    openQuizModal();
+    // Переключаем сразу на шаг 1 (выбор бренда), так как проблему мы уже зафиксировали
+    changeQuizStep(1); 
+  }
 }
+
 
 // Управление бургер-меню
 function openBurgerMenu() {
