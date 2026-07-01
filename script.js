@@ -270,11 +270,11 @@ function toggleFaq(element) {
 // ==========================================
 // НАСТРОЙКА SUPABASE
 // ==========================================
-const SUPABASE_URL = 'https://rikhpxdysaamkbcvfnkh.supabase.co/rest/v1/';
+const SUPABASE_URL = 'https://rikhpxdysaamkbcvfnkh.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_FKQJQV6xvJujVg8sEKFwJg_5wUAr3-s';
 
 // Инициализируем клиента базы данных
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Глобальный объект, который собирает данные от квиза по шагам
 let quizDraftOrder = {
@@ -361,7 +361,6 @@ async function sendQuizToSupabase() {
   const nameInp = document.getElementById('quiz-name').value.trim();
   const phoneInp = document.getElementById('quiz-phone').value.trim();
 
-  // Валидация: имя и телефон — обязательны
   if (nameInp === "" || phoneInp === "") {
     alert("Пожалуйста, заполните поля 'Имя' и 'Номер телефона'!");
     return;
@@ -370,36 +369,44 @@ async function sendQuizToSupabase() {
   quizDraftOrder.clientName = nameInp;
   quizDraftOrder.clientPhone = phoneInp;
 
-  // Кнопка отправки на время блокируется, чтобы избежать случайных повторных кликов
   const submitBtn = document.querySelector('.quiz-submit-btn');
   submitBtn.innerText = "Отправка...";
   submitBtn.disabled = true;
 
   try {
-    // Делаем INSERT-запрос в твою таблицу orders в Supabase
+    // Выводим в консоль то, что пытаемся отправить, для самопроверки
+    console.log("Данные перед отправкой в Supabase:", quizDraftOrder);
+
     const { data, error } = await supabase
       .from('orders')
       .insert([
         { 
           client_name: quizDraftOrder.clientName, 
           client_phone: quizDraftOrder.clientPhone,
-          device_type: quizDraftOrder.deviceType,
-          initial_problem: `Бренд: ${quizDraftOrder.brand}. Описание: ${quizDraftOrder.initialProblem}`,
-          source: quizDraftOrder.source
+          // Если эти поля пустые, временно передаем строки, чтобы не сработал NOT NULL в БД
+          device_type: quizDraftOrder.deviceType || "Не указан",
+          initial_problem: `Бренд: ${quizDraftOrder.brand || 'Не выбран'}. Описание: ${quizDraftOrder.initialProblem || 'Нет описания'}`,
+          source: quizDraftOrder.source || "Лендинг Квиз"
         }
       ]);
 
-    if (error) throw error;
+    if (error) {
+      // Важно: генерируем ошибку так, чтобы передать весь объект ответа Supabase
+      throw error; 
+    }
 
-    // Если всё успешно
     alert("Заявка успешно отправлена! Мастер свяжется с вами.");
+    resetQuizForm(); // Очищаем форму
     closeQuizModal();
 
   } catch (err) {
-    console.error("Ошибка Supabase:", err.message);
-    alert("Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.");
+    // Внимание сюда! Смотрим полную структуру ошибки в консоли F12
+    console.error("Критическая ошибка при работе с Supabase:", err);
+    
+    // Выводим подробности для пользователя/разработчика
+    const errorDetails = err.message || err.details || JSON.stringify(err);
+    alert(`Ошибка Supabase: ${errorDetails}`);
   } finally {
-    // Возвращаем кнопку в исходное состояние
     submitBtn.innerText = "Отправить заявку ⚡";
     submitBtn.disabled = false;
   }
