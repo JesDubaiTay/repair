@@ -1,3 +1,12 @@
+// Глобальный объект, который собирает данные от квиза по шагам
+let quizDraftOrder = {
+  clientName: "",
+  clientPhone: "",
+  deviceType: "",       // Запишем сюда выбранную услугу, если кликнули по каталогу
+  brand: "",            // Шаг 1
+  initialProblem: "",   // Шаг 2
+  source: "Квиз-форма"  // Источник заявки по умолчанию
+};
 // Глобальный объект для сбора ответов клиента
 let draftOrder = {
   initialProblem: "",
@@ -275,16 +284,6 @@ const SUPABASE_ANON_KEY = 'sb_publishable_FKQJQV6xvJujVg8sEKFwJg_5wUAr3-s';
 
 // Инициализируем клиента базы данных
 window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// Глобальный объект, который собирает данные от квиза по шагам
-let quizDraftOrder = {
-  clientName: "",
-  clientPhone: "",
-  deviceType: "",       // Запишем сюда выбранную услугу, если кликнули по каталогу
-  brand: "",            // Шаг 1
-  initialProblem: "",   // Шаг 2
-  source: "Квиз-форма"  // Источник заявки по умолчанию
-};
 
 // ==========================================
 // УПРАВЛЕНИЕ ВИЗУАЛОМ КВИЗА (ОТКРЫТИЕ / ЗАКРЫТИЕ)
