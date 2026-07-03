@@ -1,0 +1,1884 @@
+:root {
+  --bg-main: #F2F4F3;
+  --bg-card: #FFFFFF;
+  --text-dark: #1A2521;
+  --text-muted: #606C66;
+  --accent-green: #0A5C36;
+  --accent-bright: #00875A;
+  --border-light: rgba(10, 92, 54, 0.08);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-dark);
+  padding-top: 110px; /* Отступ под фиксированную шапку */
+}
+
+/* ШАПКА */
+.header-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: linear-gradient(to bottom, rgba(242, 244, 243, 0.98) 60%, rgba(242, 244, 243, 0.6) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.top-contacts {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 40px;
+  font-size: 11px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.top-contacts .phone {
+  text-decoration: none;
+  color: var(--accent-green);
+  font-weight: 600;
+}
+
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px 25px 40px;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.logo-dot {
+  color: var(--accent-bright);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* КНОПКИ ШАПКИ */
+.btn-services {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dark);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(10, 92, 54, 0.02);
+  transition: all 0.2s ease;
+}
+
+.btn-services:hover, .btn-services.active {
+  border-color: var(--accent-green);
+  background: var(--bg-main);
+}
+
+.grid-icon {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  width: 12px;
+  height: 12px;
+}
+
+.grid-icon span {
+  background: var(--text-dark);
+  border-radius: 1px;
+}
+
+.btn-burger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.btn-burger span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--text-dark);
+}
+
+/* ГЛАВНЫЙ ЭКРАН */
+.hero-section {
+  min-height: calc(100vh - 110px);
+  display: flex;
+  align-items: center;
+  padding: 40px;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  
+  /* 1. Задаем сплошной фоновый градиент на весь экран (БЕЗ картинок внутри) */
+  background-color: #0a2518; /* Базовый хвойный цвет для подстраховки */
+  background-image: linear-gradient(
+    135deg, 
+    rgba(10, 37, 24, 1) 0%,     /* Плотный хвойный слева под текст */
+    rgba(26, 37, 33, 0.95) 50%, 
+    rgba(15, 35, 25, 0.9) 100%   /* Такой же темно-зеленый справа */
+  ) !important;
+}
+
+/* 2. Добавляем картинку через псевдоэлемент, чтобы она лежала ПОВЕРХ сплошного фона */
+.hero-section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 60px; /* Отступ от правого края страницы */
+  width: 500px; /* Красивый крупный размер системного блока */
+  height: 100%;
+  
+  /* Подключаем сам файл картинки */
+  background-image: url('pc-main.jpg'); 
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-size: contain; /* Картинка не сожмется и не обрежется */
+  z-index: 1; /* Выносит картинку наверх */
+  pointer-events: none; /* Чтобы картинка не мешала кликать, если наедет на инпут */
+  opacity: 0.35; /* 0.35 — это 35% видимости. Компьютер станет мягким, полупрозрачным */
+  /* Плавный переход, если в будущем захотите сделать картинку ярче при наведении */
+  transition: opacity 0.3s ease; 
+}
+
+/* Сдвигаем текст на передний план, чтобы он не ушел под картинку */
+.hero-section .hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+}
+/* Перекрашиваем текст внутри главного экрана в белый */
+.hero-content h1 {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+  color: #FFFFFF; /* Белый цвет заголовка */
+}
+
+.hero-content p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 32px;
+  color: rgba(255, 255, 255, 0.8); /* Мягкий полупрозрачный белый для подзаголовка */
+}
+
+.hero-content {
+  max-width: 600px;
+}
+
+.hero-content h1 {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.hero-content p {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 32px;
+}
+
+.search-box {
+  display: flex;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  padding: 6px 6px 6px 20px;
+  border-radius: 40px;
+  box-shadow: 0 10px 25px rgba(10, 92, 54, 0.04);
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  background: transparent;
+}
+
+.btn-search-submit {
+  background: var(--accent-green);
+  color: white;
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-search-submit:hover {
+  background: var(--accent-bright);
+}
+
+/* ВЫПАДАЮЩАЯ ШТОРКА УСЛУГ */
+.services-dropdown {
+  position: fixed;
+  top: 110px;
+  left: 0;
+  width: 100%;
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+  background: #E6E9E7; /* Плотный подложечный хвойно-серый тон */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+  z-index: 999;
+  display: none;
+  padding: 30px 40px 60px 40px;
+}
+
+.services-dropdown.open {
+  display: block;
+}
+
+.services-container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.tabs-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.tab-btn {
+  background: rgba(10, 92, 54, 0.06);
+  border: none;
+  padding: 8px 22px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn.active, .tab-btn:hover {
+  background: var(--bg-card);
+  color: var(--accent-green);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+
+/* КАРТОЧКА УСЛУГИ */
+.service-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.25s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(10, 92, 54, 0.15);
+  box-shadow: 0 10px 20px rgba(10, 92, 54, 0.03);
+}
+
+.service-card.hidden {
+  display: none;
+}
+
+.card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--bg-main);
+  border-radius: 10px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dark);
+  width: fit-content;
+}
+
+.card-badge .dot {
+  width: 5px;
+  height: 5px;
+  background: var(--accent-bright);
+  border-radius: 50%;
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 110px;
+  margin: 12px 0;
+  background: #F8FAF9; /* Текстурная светлая заглушка под фото */
+  border-radius: 8px;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* ОВЕРЛЕЙ БУРГЕР-МЕНЮ */
+.overlay-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(242, 244, 243, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 30px 40px;
+}
+
+.overlay-menu.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.btn-close {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.menu-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.menu-item {
+  text-decoration: none;
+  background: var(--bg-card);
+  color: var(--text-dark);
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--border-light);
+  transition: all 0.2s;
+}
+
+.menu-item:hover {
+  background: var(--bg-main);
+  border-color: var(--accent-green);
+}
+
+.menu-item.highlight {
+  background: var(--accent-green);
+  color: white;
+  border-color: var(--accent-green);
+}
+
+.menu-item.highlight:hover {
+  background: var(--accent-bright);
+}
+/* Контейнер всей секции преимуществ */
+.advantages-section {
+  padding: 80px 40px;
+  background-color: var(--bg-main);
+  display: flex;
+  justify-content: center; /* Центрируем всю сетку по горизонтали */
+}
+
+/* Флекс-контейнер для карточек */
+.advantages-container {
+  display: flex;
+  justify-content: center;
+  align-items: stretch; /* Чтобы все карточки были одинаковой высоты */
+  gap: 20px; /* Расстояние между карточками */
+  width: 100%;
+  max-width: 1300px; /* Ограничиваем максимальную ширину */
+}
+
+/* Базовые стили для всех карточек */
+.adv-card {
+  flex: 1; /* Все карточки делят место поровну и сжимаются одинаково */
+  min-width: 220px; /* Чтобы карточки не сжимались слишком сильно */
+  background: var(--accent-green); /* Наш фирменный хвойный цвет вместо синего */
+  border-radius: 24px; /* Красивые закругленные углы */
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Текст падает вниз, контент вверху */
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(10, 92, 54, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.adv-card:hover {
+  transform: translateY(-5px); /* Легкий интерактив при наведении */
+  box-shadow: 0 15px 35px rgba(10, 92, 54, 0.1);
+}
+
+/* Заголовок внизу карточки */
+.adv-title {
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: auto; /* Прижимает текст строго к низу */
+  z-index: 2; /* Чтобы текст был поверх картинки */
+}
+
+/* Специфичные стили для первой текстовой карточки */
+.text-card {
+  background: var(--accent-green);
+}
+
+/* Белое облако мыслей на первой карточке */
+.speech-bubble {
+  background: #FFFFFF;
+  border-radius: 30px 30px 30px 4px; /* Срезаем один угол как на скрине */
+  padding: 20px;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.speech-bubble p {
+  color: var(--accent-green);
+  font-weight: 700;
+  font-size: 15px;
+  text-align: center;
+}
+
+/* Стили для карточек с медиа-контентом (картинками) */
+.adv-image-box {
+  width: 100%;
+  height: 140px; /* Высота зоны под картинку */
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  position: relative;
+}
+/* Стили для самого тега img */
+.adv-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Картинка заполнит блок без искажений */
+  display: block;
+  /* Мягкий фильтр, чтобы картинки гармонировали с общим дизайном */
+  filter: brightness(0.9) contrast(1.05); 
+}
+/* Основная секция каталога */
+.catalog-section {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 80px 40px;
+}
+
+/* Шапка каталога: заголовок слева, табы справа */
+.catalog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.catalog-header h2 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+/* Сетка каталога (По 4 карточки в ряд) */
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px; /* Чуть больше отступы между крупными карточками */
+}
+
+/* Укрупненная карточка каталога */
+.catalog-card {
+  background: var(--bg-card);
+  border-radius: 24px; /* Более мягкое закругление для крупных блоков */
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  border: 1px solid transparent;
+  box-shadow: 0 4px 20px rgba(10, 92, 54, 0.02);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.catalog-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(10, 92, 54, 0.12);
+  box-shadow: 0 15px 30px rgba(10, 92, 54, 0.05);
+}
+
+/* Скрытие карточек при фильтрации */
+.catalog-card.hidden {
+  display: none;
+}
+
+/* Увеличенная заглушка под картинку техники */
+.catalog-card .image-placeholder {
+  width: 100%;
+  height: 180px; /* Существенно выше, чем в шапке, чтобы техника смотрелась сочно */
+  margin: 20px 0;
+  background: #F8FAF9;
+  border-radius: 12px;
+}
+/* Карточка квиза */
+.quiz-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 550px;
+  padding: 40px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(10, 92, 54, 0.1);
+}
+
+.quiz-close-btn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* Полоса прогресса */
+.quiz-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-main);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.progress-line {
+  height: 100%;
+  background: var(--accent-bright);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.step-indicator {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 30px;
+}
+
+/* Переключение шагов */
+.quiz-step {
+  display: none;
+}
+.quiz-step.active {
+  display: block;
+}
+
+.quiz-step h3 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.quiz-step-sub {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* Сетка брендов */
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.brand-select-btn {
+  background: var(--bg-main);
+  border: 1px solid transparent;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.brand-select-btn:hover {
+  border-color: var(--accent-green);
+  background: var(--bg-card);
+  color: var(--accent-green);
+}
+
+/* Навигационные кнопки квиза */
+.quiz-skip-btn {
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+}
+.quiz-skip-btn:hover { color: var(--accent-green); }
+
+.quiz-nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.quiz-back-btn {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.quiz-next-btn, .quiz-submit-btn {
+  background: var(--accent-green);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.quiz-next-btn:hover, .quiz-submit-btn:hover { background: var(--accent-bright); }
+
+/* Поля ввода */
+.quiz-textarea {
+  width: 100%;
+  height: 120px;
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 16px;
+  outline: none;
+  font-size: 15px;
+  resize: none;
+}
+.quiz-textarea:focus { border-color: var(--accent-green); }
+
+.quiz-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.quiz-input-group label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.quiz-input {
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  outline: none;
+  font-size: 15px;
+}
+.quiz-input:focus { border-color: var(--accent-green); }
+
+/* ==========================================================================
+   НОВЫЙ CSS ДЛЯ СТАНЦИОНАРНОГО КВИЗ-БЛОКА НА СТРАНИЦЕ УСЛУГИ
+   ========================================================================== */
+
+/* Секция-обертка на всю ширину страницы */
+.quiz-landing-section {
+  padding: 80px 20px;
+  background-color: #f8f9fa; /* Легкий серый фон секции, чтобы отделить от баннера */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Сама карточка квиза — теперь она широкая и стационарная */
+.quiz-landing-card {
+  max-width: 850px; 
+  width: 100%;
+  background: #ffffff;
+  border-radius: 24px; /* Скругления под стиль ваших зеленых карточек */
+  padding: 45px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e9ecef;
+  box-sizing: border-box;
+}
+
+/* Шкала прогресса */
+.quiz-landing-card .quiz-progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.quiz-landing-card .progress-line {
+  height: 100%;
+  background-color: #14532d; /* Ваш фирменный темно-зеленый цвет */
+  transition: width 0.3s ease;
+}
+
+.quiz-landing-card .step-indicator {
+  font-size: 0.95rem;
+  color: #6c757d;
+  font-weight: 600;
+  margin-bottom: 35px;
+}
+
+/* Шаги квиза */
+.quiz-landing-card .quiz-step {
+  display: none; 
+  flex-direction: column;
+}
+
+.quiz-landing-card .quiz-step.active {
+  display: flex; /* Показываем только тот шаг, у которого есть класс active */
+}
+
+.quiz-landing-card h3 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 10px 0;
+  line-height: 1.3;
+}
+
+.quiz-landing-card .quiz-step-sub {
+  font-size: 1rem;
+  color: #6c757d;
+  margin-bottom: 30px;
+}
+
+/* Новая широкая сетка брендов (4 колонки) */
+.quiz-landing-card .brands-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.quiz-landing-card .brand-select-btn {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  padding: 18px 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 14px;
+  cursor: pointer;
+  color: #1a1a1a;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.quiz-landing-card .brand-select-btn:hover {
+  border-color: #14532d;
+  background-color: #f4fdf7;
+  color: #14532d;
+}
+
+/* Кнопка "Пропустить шаг" */
+.quiz-landing-card .quiz-skip-btn {
+  background: none;
+  border: none;
+  color: #6c757d;
+  font-size: 0.95rem;
+  cursor: pointer;
+  align-self: flex-start;
+  font-weight: 500;
+  padding: 0;
+}
+
+.quiz-landing-card .quiz-skip-btn:hover {
+  color: #1a1a1a;
+}
+
+/* Шаг 2: Ввод текста */
+.quiz-landing-card .quiz-textarea {
+  width: 100%;
+  height: 130px;
+  border: 1px solid #e9ecef;
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 1rem;
+  resize: none;
+  box-sizing: border-box;
+  margin-bottom: 25px;
+  outline: none;
+  font-family: inherit;
+}
+
+.quiz-landing-card .quiz-textarea:focus {
+  border-color: #14532d;
+}
+
+/* Шаг 3: Поля ввода */
+.quiz-landing-card .quiz-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.quiz-landing-card .quiz-input-group label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.quiz-landing-card .quiz-input {
+  padding: 14px 16px;
+  border: 1px solid #e9ecef;
+  border-radius: 14px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.quiz-landing-card .quiz-input:focus {
+  border-color: #14532d;
+}
+
+/* Кнопки навигации по шагам */
+.quiz-landing-card .quiz-nav-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.quiz-landing-card .quiz-back-btn {
+  background: #f1f3f5;
+  border: none;
+  padding: 14px 30px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #495057;
+}
+
+.quiz-landing-card .quiz-next-btn, 
+.quiz-landing-card .quiz-submit-btn {
+  background: #14532d; /* Ваш сочный зеленый цвет */
+  color: #ffffff;
+  border: none;
+  padding: 14px 35px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex: 1; 
+  transition: background-color 0.2s;
+}
+
+.quiz-landing-card .quiz-next-btn:hover, 
+.quiz-landing-card .quiz-submit-btn:hover {
+  background-color: #166534;
+}
+
+/* ==========================================================================
+   НОВЫЕ ИЗОЛИРОВАННЫЕ СТИЛИ ДЛЯ КАРТОЧЕК ПОЛОМОК
+   ========================================================================== */
+
+.repair-list-section {
+  padding: 80px 20px !important;
+  background-color: #ffffff !important;
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.repair-list-container {
+  max-width: 1200px !important;
+  width: 100% !important;
+}
+
+/* Шапка блока */
+.repair-list-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  margin-bottom: 50px !important;
+  gap: 30px !important;
+}
+
+.repair-list-intro {
+  max-width: 700px !important;
+}
+
+.repair-list-intro h2 {
+  font-size: 2.2rem !important;
+  font-weight: 800 !important;
+  color: #1a1a1a !important;
+  margin: 0 0 12px 0 !important;
+}
+
+.repair-list-intro p {
+  font-size: 1.05rem !important;
+  color: #6c757d !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+}
+
+/* Форма-плашка справа */
+.repair-list-action {
+  display: flex !important;
+  align-items: center !important;
+  background-color: #f1f3f5 !important;
+  padding: 8px 8px 8px 20px !important;
+  border-radius: 100px !important;
+  gap: 15px !important;
+}
+
+.repair-list-discount {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: #495057 !important;
+}
+
+.repair-list-btn {
+  background-color: #14532d !important; /* Ваш темно-зеленый фирменный */
+  color: #ffffff !important;
+  border: none !important;
+  padding: 12px 24px !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  border-radius: 50px !important;
+  cursor: pointer !important;
+}
+
+/* Сетка карточек — жестко задаем 4 колонки */
+.repair-list-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 24px !important;
+}
+
+/* Сама белая карточка */
+.repair-list-item {
+  background: #ffffff !important;
+  border-radius: 24px !important;
+  overflow: hidden !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid #e9ecef !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Область изображения */
+.repair-list-media {
+  position: relative !important;
+  width: 100% !important;
+  height: 200px !important;
+  background-color: #f8f9fa !important;
+}
+
+.repair-list-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* Плашки поверх картинок */
+.repair-list-badges {
+  position: absolute !important;
+  top: 15px !important;
+  left: 15px !important;
+  display: flex !important;
+  gap: 8px !important;
+  z-index: 5 !important;
+}
+
+.repair-badge-lbl {
+  padding: 6px 14px !important;
+  border-radius: 50px !important;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+}
+
+.repair-badge-lbl.bg-white {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
+}
+
+.repair-badge-lbl.bg-trans {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  color: #495057 !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+/* Контентная часть внутри карточки */
+.repair-list-body {
+  padding: 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+}
+
+.repair-list-title {
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: #1a1a1a !important;
+  line-height: 1.4 !important;
+  margin: 0 0 20px 0 !important;
+  min-height: 64px !important; /* Удерживает заголовки ровными */
+}
+
+/* Список овалов */
+.repair-list-tags {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  align-items: flex-start !important;
+}
+
+.repair-pill-tag {
+  background: #ffffff !important;
+  color: #14532d !important;
+  border: 1px solid #14532d !important; /* Зеленый контур */
+  padding: 8px 18px !important;
+  border-radius: 50px !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+}
+/* ==========================================================================
+   ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ ПРАЙС-ЛИСТА (КВАДРАТНЫЕ ПЛАШКИ + ХОВЕР)
+   ========================================================================== */
+
+.repair-price-section {
+  padding: 80px 20px !important;
+  background-color: #f8f9fa !important;
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.repair-price-container {
+  max-width: 850px !important; /* Чуть расширили, чтобы длинный текст не сжимался */
+  width: 100% !important;
+}
+
+.repair-price-main-title {
+  font-size: 2.2rem !important;
+  font-weight: 800 !important;
+  color: #1a1a1a !important;
+  margin-bottom: 40px !important;
+}
+
+.repair-price-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  width: 100% !important;
+}
+
+/* Изменили на закругленные прямоугольники */
+.repair-price-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background-color: #ffffff !important; /* Сделали базовый фон белым для контраста */
+  padding: 20px 24px !important;
+  border-radius: 16px !important; /* Углы закруглены как у карточек преимуществ */
+  border: 1px solid #e9ecef !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important; /* Плавная плавающая анимация */
+}
+
+/* ЭФФЕКТ НАВЕДЕНИЯ: Окрашивание в ваш темно-зеленый бренд-цвет */
+.repair-price-row:hover {
+  background-color: #14532d !important; /* Темно-зеленый фон вашей темы */
+  border-color: #14532d !important;
+  transform: translateY(-2px) !important; /* Карточка слегка приподнимается */
+  box-shadow: 0 8px 20px rgba(20, 83, 45, 0.15) !important; /* Мягкая зеленоватая тень */
+}
+
+/* Название услуги */
+.repair-price-name {
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  color: #212529 !important;
+  transition: color 0.2s ease !important;
+}
+
+/* При наведении текст названия становится белым */
+.repair-price-row:hover .repair-price-name {
+  color: #ffffff !important;
+}
+
+/* Ценник справа */
+.repair-price-value {
+  background-color: #f1f3f5 !important; /* Базовый легкий серый фон для ценника */
+  color: #1a1a1a !important;
+  padding: 8px 18px !important;
+  border-radius: 50px !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
+  transition: all 0.2s ease !important;
+}
+
+/* При наведении ценник становится чистым белым, выделяясь на зеленом фоне */
+.repair-price-row:hover .repair-price-value {
+  background-color: #ffffff !important;
+  color: #14532d !important;
+}
+
+/* Маленькая точка-индикатор */
+.repair-price-value .price-dot {
+  width: 6px !important;
+  height: 6px !important;
+  background-color: #14532d !important;
+  border-radius: 50% !important;
+  transition: background-color 0.2s ease !important;
+}
+
+/* При наведении точка тоже меняет цвет на зеленый */
+.repair-price-row:hover .price-dot {
+  background-color: #14532d !important;
+}
+
+/* Выделение плашек "Бесплатно" */
+.free-badge {
+  color: #166534 !important; /* Текст изначально зеленый */
+}
+
+/* СТИЛИ ДЛЯ БОЛЬШОЙ КНОПКИ В СТИЛЕ КАРТОЧЕК */
+.repair-price-action-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background-color: #ffffff !important;
+  border: 2px dashed #14532d !important; /* Стильная пунктирная линия */
+  padding: 20px 24px !important;
+  border-radius: 16px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+  margin-top: 15px !important;
+  transition: all 0.25s ease !important;
+}
+
+.repair-price-action-row:hover {
+  background-color: #f4fdf7 !important;
+  border-style: solid !important;
+  transform: scale(1.01) !important;
+}
+
+.repair-action-text {
+  font-size: 1.2rem !important;
+  font-weight: 800 !important;
+  color: #14532d !important;
+}
+
+/* Круглая синяя кнопка из примера превращается в зеленую */
+.repair-action-circle-btn {
+  width: 44px !important;
+  height: 44px !important;
+  background-color: #14532d !important;
+  color: #ffffff !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: transform 0.2s ease !important;
+}
+
+.repair-price-action-row:hover .repair-action-circle-btn {
+  transform: translateX(4px) !important; /* Стрелочка дергается вправо при наведении */
+}
+
+/* ==========================================================================
+   СТИЛИ ДЛЯ СЕКЦИИ КОНТАКТОВ И ФУТЕРA
+   ========================================================================== */
+
+.repair-contacts-section {
+  padding: 80px 20px !important;
+  background-color: #f8f9fa !important;
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.repair-contacts-container {
+  display: flex !important;
+  max-width: 1200px !important;
+  width: 100% !important;
+  gap: 40px !important;
+  align-items: stretch !important; /* Карточка и карта будут одной высоты */
+}
+
+/* Белая карточка слева */
+.contacts-info-card {
+  flex: 1 !important;
+  background: #ffffff !important;
+  border-radius: 24px !important;
+  padding: 45px !important;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.03) !important;
+  border: 1px solid #e9ecef !important;
+  max-width: 450px !important;
+}
+
+.contacts-info-card h2 {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  color: #1a1a1a !important;
+  margin: 0 0 10px 0 !important;
+}
+
+.contacts-subtitle {
+  font-size: 0.95rem !important;
+  color: #6c757d !important;
+  margin-bottom: 35px !important;
+  line-height: 1.4 !important;
+}
+
+.contacts-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+  margin-bottom: 40px !important;
+}
+
+.contact-row-item {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 15px !important;
+}
+
+.contact-icon {
+  font-size: 1.2rem !important;
+}
+
+.contact-text {
+  font-size: 1rem !important;
+  color: #212529 !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+
+.contact-text a {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.contact-text.phone-link:hover, .contact-text.email-link:hover {
+  color: #14532d !important;
+}
+
+/* Зеленая кнопка "Связаться со мной" */
+.contacts-action-btn {
+  width: 100% !important;
+  background-color: #14532d !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 16px !important;
+  border-radius: 50px !important;
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s !important;
+}
+
+.contacts-action-btn:hover {
+  background-color: #166534 !important;
+}
+
+/* Серая коробка под карту справа */
+.contacts-map-box {
+  flex: 1.5 !important;
+  background-color: #eef1f3 !important;
+  border-radius: 24px !important;
+  overflow: hidden !important;
+  border: 1px solid #e2e6e9 !important;
+  min-height: 450px !important;
+}
+
+.map-placeholder {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #6c757d !important;
+  font-weight: 600 !important;
+}
+
+/* ==========================================
+   СТИЛИ ЧЕРНОГО ФУТЕРА
+   ========================================== */
+.repair-main-footer {
+  background-color: #111111 !important;
+  color: #ffffff !important;
+  padding: 60px 20px !important;
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.footer-container {
+  max-width: 1200px !important;
+  width: 100% !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  gap: 40px !important;
+}
+
+.footer-block {
+  flex: 1 !important;
+}
+
+.footer-logo {
+  font-size: 1.6rem !important;
+  font-weight: 800 !important;
+  margin-bottom: 15px !important;
+}
+
+.footer-copy {
+  font-size: 0.85rem !important;
+  color: #666666 !important;
+  line-height: 1.4 !important;
+}
+
+.footer-block h4 {
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  letter-spacing: 1px !important;
+  margin: 0 0 20px 0 !important;
+}
+
+.footer-links {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+.footer-links a {
+  color: #aaaaaa !important;
+  text-decoration: none !important;
+  font-size: 0.95rem !important;
+  transition: color 0.2s !important;
+}
+
+.footer-links a:hover {
+  color: #ffffff !important;
+}
+
+.info-block p {
+  font-size: 0.95rem !important;
+  color: #aaaaaa !important;
+  margin: 0 0 12px 0 !important;
+}
+
+.footer-phone {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+/* ==========================================================================
+   ИСПРАВЛЕННАЯ МОБИЛЬНАЯ АДАПТИВНОСТЬ ДЛЯ СТРАНИЦЫ ПК (ДО 768px)
+   ========================================================================== */
+@media (max-width: 768px) { 
+
+  /* 1. УБИРАЕМ ГОРИЗОНТАЛЬНЫЙ СКРОЛЛ И СДВИГИ */
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body { 
+    padding-top: 70px !important; 
+  }
+  
+  .top-contacts { 
+    display: none !important; 
+  }
+  
+  /* 2. ВЫРАВНИВАЕМ ШАПКУ И СДВИГАЕМ БУРГЕР ВЛЕВО (ЧТОБЫ ОН НЕ УХОДИЛ ЗА ЭКРАН) */
+  .main-nav { 
+    padding: 12px 16px !important; /* Чуть уменьшили боковые отступы */
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .nav-actions {
+    display: flex !important; 
+    gap: 8px !important; 
+    align-items: center !important;
+    margin-right: 4px !important; /* Жесткий отступ слева для бургера */
+  }
+
+  .btn-services {
+    display: flex !important; 
+    padding: 8px 10px !important; 
+    font-size: 0.85rem !important;
+    border-radius: 8px !important;
+  }
+
+  /* Исправляем бургер, чтобы полоски были четко видны и центрированы */
+  .btn-burger {
+    display: flex !important; 
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 38px !important;
+    height: 38px !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    background: #f1f3f5 !important;
+    border: none !important;
+    box-sizing: border-box !important;
+  }
+
+  .btn-burger span {
+    display: block !important;
+    width: 18px !important;
+    height: 2px !important;
+    background-color: #1a1a1a !important;
+    margin: 2px 0 !important;
+  }
+
+  /* 3. ПЕРЕДЕЛЫВАЕМ ГЛАВНЫЙ ЭКРАН (БЕЛЫЙ ФОН, ЧЕРНЫЙ ТЕКСТ, СДВИГ КОМПА ВПРАВО) */
+  .hero-section, .hero-service-section { 
+    padding: 40px 16px !important; 
+    display: flex !important;
+    flex-direction: column !important; /* Элементы идут строго один под другим */
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    min-height: auto !important;
+    background: #ffffff !important; /* Меняем хвойный фон на чистый белый */
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .hero-content {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin-bottom: 30px !important; /* Отступ от текста до картинки */
+  }
+  
+  /* Текст становится контрастным черным */
+  .hero-content h1, .hero-service-title { 
+    font-size: 26px !important; 
+    line-height: 1.3 !important;
+    text-align: center !important;
+    color: #1a1a1a !important; /* Черный заголовок */
+    margin-bottom: 12px !important;
+  }
+
+  .hero-content p, .hero-service-subtitle {
+    text-align: center !important;
+    font-size: 0.95rem !important;
+    color: #495057 !important; /* Серый читаемый подзаголовок */
+    line-height: 1.5 !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Исправляем поисковую строку, чтобы она не сливалась с белым фоном */
+  .search-box {
+    padding: 6px 6px 6px 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #f1f3f5 !important; /* Серый аккуратный фон инпута */
+    border: 1px solid #e9ecef !important;
+    box-sizing: border-box !important;
+    border-radius: 100px !important;
+  }
+
+  .search-box input {
+    color: #1a1a1a !important;
+  }
+
+  /* КНОПКА ОТПРАВКИ ИЗ БАННЕРА (Если у вас там кнопка "Оставить заявку") */
+  .hero-service-cta {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+  .btn-submit-request {
+    width: 100% !important;
+  }
+
+  /* 4. КАРТИНКА КОМПЬЮТЕРА — СДВИГАЕМ ПРАВЕЕ И ЦЕНТРИРУЕМ ПО СЕТКЕ */
+  .hero-service-visual, .hero-section::after {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 280px !important; /* Аккуратный размер для телефона */
+    height: auto !important;
+    min-height: 250px !important;
+    margin: 0 auto !important;
+    position: static !important; /* Отменяем абсолютное наложение под текст */
+  }
+
+  .device-hero-img, .hero-pc-img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+    opacity: 1 !important; /* На белом фоне делаем картинку полностью яркой */
+    margin-left: 20px !important; /* СДВИГАЕМ КАРТИНКУ ЧУТЬ ПРАВЕЕ, как вы просили */
+  }
+
+  /* 5. КАРТОЧКИ ПРЕИМУЩЕСТВ — ВЕРТИКАЛЬНАЯ ЛЕНТА */
+  .advantages-section {
+    padding: 40px 16px !important;
+  }
+
+  .advantages-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    overflow-x: visible !important;
+    width: 100% !important;
+  }
+
+  .adv-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    min-height: auto !important;
+    padding: 20px !important;
+  }
+}
+
+/* СВЕРХМАЛЕНЬКИЕ ЭКРАНЫ */
+@media (max-width: 480px) {
+  #services-btn-text {
+    display: none !important; 
+  }
+  .btn-services {
+    padding: 10px !important; 
+  }
+}
+/* ==========================================================================
+   ИСПРАВЛЕНИЕ СЕТКИ КАРТОЧЕК В ШТОРКЕ МЕНЮ НА МОБИЛЬНЫХ
+   ========================================================================== */
+@media (max-width: 768px) {
+  
+  /* Сама шторка должна иметь боковые отступы, чтобы карточки не липли к краям экрана */
+  .services-dropdown {
+    padding: 20px 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .services-container {
+    padding: 0 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ЖЕСТКО ЗАДАЕМ 2 КАРТОЧКИ В РЯД */
+  .services-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* Ровно 2 колонки */
+    gap: 12px !important; /* Удобный компактный отступ между карточками */
+    width: 100% !important;
+    overflow-x: hidden !important; /* Полностью убираем боковой скролл */
+  }
+
+  /* Корректируем размеры самих белых карточек в шторке, чтобы они не ломались */
+  .services-dropdown .service-card {
+    width: 100% !important;
+    min-width: 0 !important; /* Разрешаем карточкам сжиматься под 2 колонки */
+    max-width: 100% !important;
+    min-height: 200px !important; /* Делаем их чуть ниже десктопных, чтобы экономить место */
+    padding: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Уменьшаем серый внутренний квадрат под картинку */
+  .services-dropdown .image-placeholder {
+    height: 80px !important;
+    margin-top: 25px !important;
+  }
+
+  /* Название ремонта делаем чуть компактнее, чтобы длинный текст не обрезался */
+  .services-dropdown .card-title {
+    font-size: 0.95rem !important;
+    line-height: 1.2 !important;
+    margin-top: 10px !important;
+  }
+
+  /* Ценник тоже делаем аккуратнее */
+  .services-dropdown .card-badge {
+    top: 12px !important;
+    left: 12px !important;
+    padding: 4px 10px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Контейнер табов-переключателей (Все / Бытовая / Компьютеры) */
+  .tabs-container {
+    display: flex !important;
+    justify-content: center !important; /* Центрируем табы на мобильном экране */
+    flex-wrap: wrap !important; /* Если не влезут в ширину — плавно переносите */
+    gap: 8px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .tab-btn {
+    padding: 8px 16px !important;
+    font-size: 0.85rem !important;
+  }
+}
+
+/* ДОПОЛНИТЕЛЬНЫЙ СБРОС ДЛЯ СВЕРХМАЛЕНЬКИХ ТЕЛЕФОНОВ (ДО 480px) */
+@media (max-width: 480px) {
+  /* Если на экранах узких телефонов 2 карточки будут слишком мелкими, 
+     можно включить отображение по 1 в ряд для идеального удобства тапа пальцем: */
+  /*
+  .services-grid {
+    grid-template-columns: 1fr !important;
+  }
+  */
+}
+/* ==========================================================================
+   ИСПРАВЛЕНИЕ СЕТКИ ДЛЯ 8 КАРТОЧЕК ПОЛОМОК НА МОБИЛЬНЫХ (ПО 2 В РЯД)
+   ========================================================================== */
+@media (max-width: 768px) {
+
+  /* Настраиваем саму секцию, чтобы бока не прилипали к краям телефона */
+  .repair-list-section {
+    padding: 40px 16px !important;
+    background-color: #ffffff !important;
+  }
+
+  .repair-list-container {
+    width: 100% !important;
+  }
+
+  /* ЖЕСТКО ЗАДАЕМ СЕТКУ ИЗ 2 КОЛОНОК */
+  .repair-list-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* Ровно 2 карточки в ряд */
+    gap: 16px !important; /* Удобный отступ между карточками */
+    width: 100% !important;
+    overflow-x: hidden !important; /* Полностью убираем боковой скролл */
+  }
+
+  /* Исправляем геометрию самой карточки, чтобы она не сжималась */
+  .repair-list-item {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-width: 0 !important; /* Разрешаем сжатие под 2 колонки */
+    max-width: 100% !important;
+    background: #ffffff !important;
+    border-radius: 20px !important; /* Скругление под мобильный формат */
+  }
+
+  /* Корректируем зону картинки внутри карточки */
+  .repair-list-media {
+    width: 100% !important;
+    height: 140px !important; /* Фиксированная высота картинки на телефоне */
+    display: block !important;
+  }
+
+  .repair-list-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  /* Внутренние плашки-ценники поверх картинок делаем компактнее */
+  .repair-list-badges {
+    top: 10px !important;
+    left: 10px !important;
+    gap: 4px !important;
+  }
+
+  .repair-badge-lbl {
+    padding: 4px 10px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Текстовая часть внутри карточки */
+  .repair-list-body {
+    padding: 16px !important;
+  }
+
+  /* Заголовок неисправности */
+  .repair-list-title {
+    font-size: 0.95rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 12px !important;
+    min-height: auto !important; /* Отменяем десктопное выравнивание по высоте */
+    color: #1a1a1a !important;
+  }
+
+  /* Контейнер списков причин поломок (овалов) */
+  .repair-list-tags {
+    gap: 6px !important;
+  }
+
+  /* Сами зеленые овальные теги делаем компактными для мобильных */
+  .repair-pill-tag {
+    padding: 6px 12px !important;
+    font-size: 0.75rem !important;
+    line-height: 1.2 !important;
+    width: 100% !important; /* Растягиваем на всю ширину карточки */
+    text-align: left !important;
+  }
+}
+/* ==========================================================================
+   ИСПРАВЛЕНИЕ КОНТАКТОВ И ПОДВАЛА ДЛЯ МОБИЛЬНЫХ (СТРОГО ДРУГ ПОД ДРУГОМ)
+   ========================================================================== */
+@media (max-width: 768px) {
+
+  /* 1. БЛОК КОНТАКТОВ */
+  .repair-contacts-section {
+    padding: 40px 16px !important;
+    background-color: #f8f9fa !important;
+  }
+
+  /* Выстраиваем карточку контактов и карту вертикально */
+  .repair-contacts-container {
+    display: flex !important;
+    flex-direction: column !important; /* Контакты сверху, карта снизу */
+    gap: 24px !important; /* Удобный отступ между ними */
+    width: 100% !important;
+    overflow-x: hidden !important; /* Защита от бокового вылета */
+  }
+
+  /* Белая карточка с текстом */
+  .contacts-info-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 30px 20px !important; /* Компактные мобильные отступы */
+    border-radius: 20px !important;
+    box-sizing: border-box !important;
+  }
+
+  .contacts-info-card h2 {
+    font-size: 1.8rem !important;
+  }
+
+  .contacts-list {
+    margin-bottom: 30px !important;
+    gap: 20px !important;
+  }
+
+  /* Серая коробка под Яндекс.Карту опускается вниз */
+  .contacts-map-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 300px !important; /* Оптимальная высота карты на телефоне */
+    height: 300px !important;
+    border-radius: 20px !important;
+  }
+
+  /* 2. ЧЕРНЫЙ ПОДВАЛ САЙТА (ФУТЕР) */
+  .repair-main-footer {
+    padding: 40px 16px !important;
+  }
+
+  /* Разворачиваем колонки футера вертикально друг под друга */
+  .footer-container {
+    display: flex !important;
+    flex-direction: column !important; /* Стак блоков сверху вниз */
+    gap: 35px !important;
+    text-align: center !important; /* Центрируем тексты на мобилке */
+  }
+
+  .footer-links {
+    align-items: center !important; /* Центрируем ссылки меню по оси */
+    padding: 0 !important;
+  }
+  
+  .footer-block h4 {
+    margin-bottom: 15px !important;
+  }
+}

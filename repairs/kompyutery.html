@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>РемонтТех — Сервисный центр</title>
+  <link rel="stylesheet" href="service-style.css">
+</head>
+<body>
+
+  <!-- ШАПКА САЙТА -->
+  <header class="header-container">
+    <div class="top-contacts">
+      <div class="contact-item">📍 г. Тюмень, ул. Широтная 148, корп 1</div>
+      <a href="tel:+79222624705" class="contact-item phone">📞 +7 (922) 262-47-05</a>
+    </div>
+
+    <nav class="main-nav">
+      <div class="logo">РемонтТех<span class="logo-dot">.</span></div>
+      
+      <div class="nav-actions">
+        <button class="btn-services" onclick="toggleServicesMenu()">
+          <span class="grid-icon" id="services-icon">
+            <span></span><span></span><span></span><span></span>
+          </span>
+          <span id="services-btn-text">Все услуги</span>
+        </button>
+        
+        <button class="btn-burger" onclick="openBurgerMenu()">
+          <span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ВЫПАДАЮЩАЯ ПАНЕЛЬ С УСЛУГАМИ (Поверх контента) -->
+  <div id="services-panel" class="services-dropdown">
+    <div class="services-container">
+      <div class="tabs-container">
+        <button class="tab-btn active" onclick="filterServices('all', this)">Все</button>
+        <button class="tab-btn" onclick="filterServices('appliances', this)">Бытовая техника</button>
+        <button class="tab-btn" onclick="filterServices('computers', this)">Компьютеры</button>
+      </div>
+
+      <div class="services-grid">
+        <!-- Бытовая техника -->
+        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт электроплит')">
+          <div class="card-badge"><span class="dot"></span> от 800 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт электроплит</div>
+        </div>
+        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт холодильников')">
+          <div class="card-badge"><span class="dot"></span> от 1000 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт холодильников</div>
+        </div>
+        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт стиральных машин')">
+          <div class="card-badge"><span class="dot"></span> от 1000 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт стиральных машин</div>
+        </div>
+        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт духовых шкафов')">
+          <div class="card-badge"><span class="dot"></span> от 800 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт духовых шкафов</div>
+        </div>
+        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт варочных панелей')">
+          <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт варочных панелей</div>
+        </div>
+        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт посудомоечных машин')">
+          <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт посудомоечных машин</div>
+        </div>
+
+        <!-- Компьютеры -->
+        <div class="service-card" data-category="computers" onclick="scrollToTopAndCloseMenu()">
+          <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт компьютеров</div>
+        </div>
+        <div class="service-card" data-category="computers" onclick="selectDeviceType('Ремонт ноутбуков')">
+          <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт ноутбуков</div>
+        </div>
+        <div class="service-card" data-category="computers" onclick="selectDeviceType('Восстановление данных')">
+          <div class="card-badge"><span class="dot"></span> от 900 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Восстановление данных</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ГЛАВНЫЙ ЭКРАН (HERO) -->
+  <section class="hero-section" id="hero">
+    <div class="hero-content">
+      <h1>Отремонтируем вашу технику в день заявки</h1>
+      <p>Отремонтируем технику у вас на дому или в сервисе. Приедем в любое удобное для Вас время.</p>
+      
+      <div class="search-box">
+        <input type="text" id="initial-problem" placeholder="Что нужно починить?" />
+        <button class="btn-search-submit" onclick="startQuizFromHero()">➔</button>
+      </div>
+    </div>
+  </section>
+  <section class="advantages-section" id="about">
+  <div class="advantages-container">
+    
+    <!-- Карточка 1 (Текстовая, вводная) -->
+    <div class="adv-card text-card">
+      <div class="speech-bubble">
+        <p>Как работает сервис?</p>
+      </div>
+      <h3 class="adv-title">О нашем подходе в двух словах</h3>
+    </div>
+
+    <!-- Карточка 2 -->
+    <div class="adv-card media-card">
+      <div class="adv-image-box">
+        <!-- Заглушка под будущую фотку мастера за работой -->
+        <img src="adv-quality.jpg" alt="Качество ремонта" class="adv-img">
+      </div>
+      <h3 class="adv-title">Качество ремонта</h3>
+    </div>
+
+    <!-- Карточка 3 -->
+    <div class="adv-card media-card">
+      <div class="adv-image-box">
+        <!-- Заглушка под 3D графику выгоды/скидок -->
+        <img src="adv-discounts.jpg" alt="Выгоды ремонта" class="adv-img">
+      </div>
+      <h3 class="adv-title">Выгода ремонта</h3>
+    </div>
+
+    <!-- Карточка 4 -->
+    <div class="adv-card media-card">
+      <div class="adv-image-box">
+        <!-- Заглушка под фото высокого сервиса -->
+        <img src="adv-service.jpg" alt="Высокий сервис" class="adv-img">
+      </div>
+      <h3 class="adv-title">Высокий сервис</h3>
+    </div>
+
+    <!-- Карточка 5 -->
+    <div class="adv-card media-card">
+      <div class="adv-image-box">
+        <!-- Заглушка под иконку щита/гарантии -->
+        <img src="adv-honesty.jpg" alt="Честность и гарантия" class="adv-img">
+      </div>
+      <h3 class="adv-title">Честность</h3>
+    </div>
+
+  </div>
+</section>
+  <!-- ПОЛНОЭКРАННОЕ БУРГЕР-МЕНЮ -->
+  <div id="fullscreen-menu" class="overlay-menu">
+    <button class="btn-close" onclick="closeBurgerMenu()">✕</button>
+    <div class="menu-links">
+      <a href="#hero" class="menu-item" onclick="closeBurgerMenu()">В начало</a>
+      <a href="#" class="menu-item" onclick="openServicesFromMenu()">Что ремонтируем?</a>
+      <a href="#about" class="menu-item" onclick="closeBurgerMenu()">О нас</a>
+      <a href="#blog" class="menu-item" onclick="closeBurgerMenu()">Блог</a>
+      <a href="#reviews" class="menu-item" onclick="closeBurgerMenu()">Отзывы</a>
+      <a href="javascript:void(0);" class="menu-item highlight" onclick="closeBurgerMenu(); openQuizPopupModal('Бургер-меню, раздел компьютеры');">Оставить заявку на ремонт</a>
+      <a href="#contacts" class="menu-item" onclick="closeBurgerMenu()">Контакты</a>
+    </div>
+  </div>
+
+<!-- ПОДКЛЮЧЕНИЕ SUPABASE СУПАБЕЙС СУПА БД -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="service-script.js"></script>
+
+<!-- НОВАЯ СЕКЦИЯ: ПОПУЛЯРНЫЕ НЕИСПРАВНОСТИ ПК -->
+<section class="repair-list-section">
+  <div class="repair-list-container">
+    
+    <!-- Шапка секции -->
+    <div class="repair-list-header">
+      <div class="repair-list-intro">
+        <h2>Частые причины поломок</h2>
+        <p>Мы указали самые явные причины неисправностей, но в каждом конкретном случае всегда нужна диагностика специалиста.</p>
+      </div>
+      <div class="repair-list-action">
+        <span class="repair-list-discount">Скидка 500 руб</span>
+        <button class="repair-list-btn" onclick="openQuizPopupModal('Кнопка в блоке поломок, раздел компьютеры')">Оставить заявку</button>
+      </div>
+    </div>
+
+    <!-- Сетка из 8 карточек -->
+    <div class="repair-list-grid">
+      
+      <!-- Карточка 1 -->
+      <div class="repair-list-item">
+        <div class="repair-list-media">
+          <div class="repair-list-badges">
+            <span class="repair-badge-lbl bg-white">от 600 руб.</span>
+            <span class="repair-badge-lbl bg-trans">⏱ 2 часа</span>
+          </div>
+          <img src="problem-noise.jpg" alt="Сильно нагревается, шумит" class="repair-list-img">
+        </div>
+        <div class="repair-list-body">
+          <h3 class="repair-list-title">Сильно нагревается, шумит, сам выключается:</h3>
+          <div class="repair-list-tags">
+            <span class="repair-pill-tag">Засорена система охлаждения</span>
+            <span class="repair-pill-tag">Высохла термопаста на процессоре</span>
+            <span class="repair-pill-tag">Сбой в работе кулера (вентилятора)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Карточка 2 -->
+      <div class="repair-list-item">
+        <div class="repair-list-media">
+          <div class="repair-list-badges">
+            <span class="repair-badge-lbl bg-white">от 800 руб.</span>
+            <span class="repair-badge-lbl bg-trans">⏱ 2-3 часа</span>
+          </div>
+          <img src="problem-power.jpg" alt="Не включается" class="repair-list-img">
+        </div>
+        <div class="repair-list-body">
+          <h3 class="repair-list-title">Не включается, не горят индикаторы:</h3>
+          <div class="repair-list-tags">
+            <span class="repair-pill-tag">Сломан блок питания (БП)</span>
+            <span class="repair-pill-tag">Вышла из строя материнская плата</span>
+            <span class="repair-pill-tag">Поврежден кабель питания или кнопка</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Карточка 3 -->
+      <div class="repair-list-item">
+        <div class="repair-list-media">
+          <div class="repair-list-badges">
+            <span class="repair-badge-lbl bg-white">от 800 руб.</span>
+            <span class="repair-badge-lbl bg-trans">⏱ 2 часа</span>
+          </div>
+          <img src="problem-display.jpg" alt="Включается, но нет изображения" class="repair-list-img">
+        </div>
+        <div class="repair-list-body">
+          <h3 class="repair-list-title">Включается, но нет изображения:</h3>
+          <div class="repair-list-tags">
+            <span class="repair-pill-tag">Проблема с видеокартой (GPU)</span>
+            <span class="repair-pill-tag">Неисправна оперативная память (RAM)</span>
+            <span class="repair-pill-tag">Сбой прошивки BIOS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Карточка 4 -->
+      <div class="repair-list-item">
+        <div class="repair-list-media">
+          <div class="repair-list-badges">
+            <span class="repair-badge-lbl bg-white">от 500 руб.</span>
+            <span class="repair-badge-lbl bg-trans">⏱ 2-3 часа</span>
+          </div>
+          <img src="problem-slow.jpg" alt="Виснет, медленно работает" class="repair-list-img">
+        </div>
+        <div class="repair-list-body">
+          <h3 class="repair-list-title">Виснет, медленно работает, ошибки:</h3>
+          <div class="repair-list-tags">
+            <span class="repair-pill-tag">Неисправна операционная система</span>
+            <span class="repair-pill-tag">Возможна проблема с жёстким диском</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Карточка 5 -->
+      <div class="repair-list-item">
+        <div class="repair-list-media">
+          <div class="repair-list-badges">
+            <span class="repair-badge-lbl bg-white">от 900 руб.</span>
+            <span class="repair-badge-lbl bg-trans">⏱ 3 часа</span>
+          </div>
+          <img src="problem-lines.jpg" alt="На экране разводы, полосы" class="repair-list-img">
+        </div>
+        <div class="repair-list-body">
+          <h3 class="repair-list-title">На экране разводы, полосы:</h3>
+          <div class="repair-list-tags">
+            <span class="repair-pill-tag">Нарушен шлейф или слабый контакт</span>
+            <span class="repair-pill-tag">Повреждена матрица</span>
+            <span class="repair-pill-tag">Проблемы с видеокартой</span>
+            <span class="repair-pill-tag">Неисправна материнская плата</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Карточка 6 -->
+      <div class="repair-list-item">
+        <div class="repair-list-media">
+          <div class="repair-list-badges">
+            <span class="repair-badge-lbl bg-white">от 800 руб.</span>
+            <span class="repair-badge-lbl bg-trans">⏱ 2-3 часа</span>
+          </div>
+          <img src="problem-keyboard.jpg" alt="Не работает клавиатура" class="repair-list-img">
+        </div>
+        <div class="repair-list-body">
+          <h3 class="repair-list-title">Не работает клавиатура:</h3>
+          <div class="repair-list-tags">
+            <span class="repair-pill-tag">Вирусы или поломка драйверов</span>
+            <span class="repair-pill-tag">В клавиатуру попала влага</span>
+            <span class="repair-pill-tag">Неисправна микросхема</span>
+            <span class="repair-pill-tag">Физические повреждения</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Карточка 7 -->
+      <div class="repair-list-item">
+        <div class="repair-list-media">
+          <div class="repair-list-badges">
+            <span class="repair-badge-lbl bg-white">от 800 руб.</span>
+            <span class="repair-badge-lbl bg-trans">⏱ 2 часа</span>
+          </div>
+          <img src="problem-sound.jpg" alt="Не работает звук" class="repair-list-img">
+        </div>
+        <div class="repair-list-body">
+          <h3 class="repair-list-title">Не работает звук:</h3>
+          <div class="repair-list-tags">
+            <span class="repair-pill-tag">Вирусы или поломка драйверов</span>
+            <span class="repair-pill-tag">Неисправна звуковая карта</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Карточка 8 -->
+      <div class="repair-list-item">
+        <div class="repair-list-media">
+          <div class="repair-list-badges">
+            <span class="repair-badge-lbl bg-white">от 800 руб.</span>
+            <span class="repair-badge-lbl bg-trans">⏱ 2 часа</span>
+          </div>
+          <img src="problem-internet.jpg" alt="Нет подключения к интернету" class="repair-list-img">
+        </div>
+        <div class="repair-list-body">
+          <h3 class="repair-list-title">Нет подключения к интернету:</h3>
+          <div class="repair-list-tags">
+            <span class="repair-pill-tag">Поломка сетевой карты</span>
+            <span class="repair-pill-tag">Проблема с драйверами</span>
+            <span class="repair-pill-tag">Вирусы на компьютере</span>
+            <span class="repair-pill-tag">Неполадки с Wi-Fi роутером</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- СЕКЦИЯ: ФИРМЕННЫЙ ПРАЙС-ЛИСТ НА РЕМОНТ ПК -->
+<section class="repair-price-section">
+  <div class="repair-price-container">
+    
+    <h2 class="repair-price-main-title">Прайс-лист</h2>
+    
+    <div class="repair-price-list">
+      
+      <!-- ЧАСТЬ 1 -->
+      <div class="repair-price-row">
+        <span class="repair-price-name">Замена системы охлаждения</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 800 руб</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Ремонт материнской платы</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 1300 руб</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Замена матрицы</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 800 руб</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Замена клавиатуры</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 800 руб</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Восстановление данных</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 1800 руб</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Сборка компьютера</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 800 руб</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Апгрейд компьютера</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 1500 руб</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Настройка и оптимизация ПК</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 500 руб</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Настройка интернета и Wi-Fi роутера</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 500 руб</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Переустановка ОС Windows</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 500 руб</span>
+      </div>
+
+      <!-- ЧАСТЬ 2 -->
+      <div class="repair-price-row">
+        <span class="repair-price-name">Установка программ</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 500 руб</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Установка антивируса</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 800 руб</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Чистка от пыли и загрязнений</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 500 руб</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Замена термопасты и термопрокладок</span>
+        <span class="repair-price-value"><span class="price-dot"></span> от 500 руб</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Выезд мастера</span>
+        <span class="repair-price-value free-badge"><span class="price-dot"></span> бесплатно</span>
+      </div>
+
+      <div class="repair-price-row">
+        <span class="repair-price-name">Диагностика</span>
+        <span class="repair-price-value free-badge"><span class="price-dot"></span> бесплатно</span>
+      </div>
+
+<!-- КНОПКА-ПРИЗЫВ К ДЕЙСТВИЮ В СТИЛЕ КАРТОЧЕК (ИСПРАВЛЕННАЯ) -->
+<div class="repair-price-action-row" onclick="openQuizFromPrice()">
+  <span class="repair-action-text">Узнать стоимость ремонта</span>
+  <div class="repair-action-circle-btn">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
+      <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</div>
+
+    </div>
+  </div>
+</section>
+  <!-- Тут заканчивается ваш встроенный квиз, карточки или прайс-лист -->
+
+  <!-- МОДАЛЬНОЕ ОКНО "УЗНАТЬ СТОИМОСТЬ РЕМОНТА" (ИСПРАВЛЕННОЕ) -->
+  <div id="price-callback-modal" style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: rgba(0,0,0,0.5); z-index: 100005; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+    <div style="background: #ffffff; border-radius: 24px; padding: 40px; max-width: 450px; width: 90%; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;">
+      
+      <!-- Кнопка закрытия (крестик ✕) -->
+      <button onclick="closePriceModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6c757d;">✕</button>
+
+      <h2 style="font-size: 1.8rem; font-weight: 800; color: #1a1a1a; margin-bottom: 10px; margin-top: 15px;">Узнать стоимость ремонта</h2>
+      <p style="font-size: 0.95rem; color: #6c757d; margin-bottom: 30px; line-height: 1.4;">Оставьте заявку и мы свяжемся с вами в ближайшее время</p>
+      
+      <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;">
+        <input type="text" id="modal-callback-name" placeholder="Имя" style="width: 100%; padding: 16px 20px; border: none; background-color: #f1f3f5; border-radius: 14px; font-size: 1rem; outline: none;">
+        <input type="tel" id="modal-callback-phone" placeholder="Телефон" style="width: 100%; padding: 16px 20px; border: none; background-color: #f1f3f5; border-radius: 14px; font-size: 1rem; outline: none;">
+      </div>
+
+      <!-- Кнопка отправки -->
+      <button onclick="sendPriceLeadToSupabase()" style="width: 100%; background-color: #14532d; color: #ffffff; border: none; padding: 16px; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer;">
+        Отправить
+      </button>
+    </div>
+  </div>
+
+<!-- СТАЦИОНАРНЫЙ КВИЗ-БЛОК ДЛЯ СТРАНИЦЫ ПК -->
+<section class="quiz-landing-section" id="quiz-block">
+  <div class="quiz-landing-card">
+    
+    <!-- ИНДИКАТОР ПРОГРЕССА -->
+    <div class="quiz-progress-bar">
+      <div id="quiz-progress-line" class="progress-line" style="width: 33.3%;"></div>
+    </div>
+    <div id="quiz-step-indicator" class="step-indicator">Шаг 1 из 3</div>
+
+    <!-- ШАГ 1: ВЫБОР БРЕНДА -->
+    <div id="quiz-step-1" class="quiz-step active">
+      <h3>Укажите бренд вашего компьютера</h3>
+      <p class="quiz-step-sub">Это поможет мастеру быстрее сориентироваться по наличию запчастей</p>
+      
+      <div class="brands-grid">
+        <button class="brand-select-btn" onclick="selectQuizBrand('ASUS')">ASUS</button>
+        <button class="brand-select-btn" onclick="selectQuizBrand('Lenovo')">Lenovo</button>
+        <button class="brand-select-btn" onclick="selectQuizBrand('HP')">HP</button>
+        <button class="brand-select-btn" onclick="selectQuizBrand('Acer')">Acer</button>
+        <button class="brand-select-btn" onclick="selectQuizBrand('MSI')">MSI</button>
+        <button class="brand-select-btn" onclick="selectQuizBrand('DELL')">DELL</button>
+        <button class="brand-select-btn" onclick="selectQuizBrand('Apple (Mac)')">Apple (Mac)</button>
+        <button class="brand-select-btn" onclick="selectQuizBrand('Собственная сборка')">Сборный ПК</button>
+      </div>
+      
+      <button class="quiz-skip-btn" onclick="selectQuizBrand('Не указан')">Пропустить этот шаг ➔</button>
+    </div>
+
+    <!-- ШАГ 2: ОПИСАНИЕ ПОЛОМКИ -->
+    <div id="quiz-step-2" class="quiz-step">
+      <h3>Что именно случилось?</h3>
+      <p class="quiz-step-sub">Опишите проблему своими словами (например: шумит кулер, зависает, не включается)</p>
+      
+      <textarea id="quiz-problem-textarea" class="quiz-textarea" placeholder="Напишите здесь описание поломки..."></textarea>
+      
+      <div class="quiz-nav-buttons">
+        <button class="quiz-back-btn" onclick="changeQuizStep(1)">← Назад</button>
+        <button class="quiz-next-btn" onclick="submitQuizStep2()">Далее ➔</button>
+      </div>
+    </div>
+
+    <!-- ШАГ 3: КОНТАКТНЫЕ ДАННЫЕ (ФИНАЛ) -->
+    <div id="quiz-step-3" class="quiz-step">
+      <h3>Оставьте контакты для связи</h3>
+      <p class="quiz-step-sub">Мастер свяжется с вами в течение 10-15 минут для уточнения деталей</p>
+      
+      <div class="quiz-input-group">
+        <label for="quiz-name">Ваше имя</label>
+        <input type="text" id="quiz-name" class="quiz-input" placeholder="Иван">
+      </div>
+
+      <div class="quiz-input-group">
+        <label for="quiz-phone">Номер телефона</label>
+        <input type="tel" id="quiz-phone" class="quiz-input" placeholder="+7 (999) 000-00-00">
+      </div>
+      
+      <div class="quiz-nav-buttons">
+        <button class="quiz-back-btn" onclick="changeQuizStep(2)">← Назад</button>
+        <button class="quiz-submit-btn" onclick="sendQuizToSupabase()">Отправить заявку ⚡</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- МОДАЛЬНОЕ ОКНО С МИНИ-КВИЗОМ (ВСПЛЫВАЕТ ИЗ БЛОКА ПОЛОМОК) -->
+<div id="quiz-popup-modal" style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: rgba(0,0,0,0.5); z-index: 100010; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+  <div style="background: #ffffff; border-radius: 24px; padding: 40px; max-width: 650px; width: 90%; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); box-sizing: border-box;">
+    
+    <!-- Кнопка закрытия -->
+    <button onclick="closeQuizPopupModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6c757d;">✕</button>
+
+    <!-- Линия прогресса -->
+    <div class="quiz-landing-card" style="padding: 0; border: none; box-shadow: none; width: 100%;">
+      <div class="quiz-progress-bar">
+        <div id="popup-quiz-progress-line" class="progress-line" style="width: 33.3%;"></div>
+      </div>
+      <div id="popup-quiz-step-indicator" class="step-indicator" style="margin-bottom: 20px;">Шаг 1 из 3</div>
+
+      <!-- ШАГ 1: ВЫБОР БРЕНДА -->
+      <div id="popup-quiz-step-1" class="quiz-step active">
+        <h3 style="font-size: 1.5rem; font-weight: 700; color: #1a1a1a; margin-bottom: 5px;">Укажите бренд вашего компьютера</h3>
+        <p class="quiz-step-sub" style="margin-bottom: 20px; font-size: 0.9rem;">Это поможет мастеру быстрее сориентироваться по наличию запчастей</p>
+        
+        <div class="brands-grid" style="grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;">
+          <button class="brand-select-btn" style="padding: 12px 5px; font-size: 0.9rem;" onclick="selectPopupQuizBrand('ASUS')">ASUS</button>
+          <button class="brand-select-btn" style="padding: 12px 5px; font-size: 0.9rem;" onclick="selectPopupQuizBrand('Lenovo')">Lenovo</button>
+          <button class="brand-select-btn" style="padding: 12px 5px; font-size: 0.9rem;" onclick="selectPopupQuizBrand('HP')">HP</button>
+          <button class="brand-select-btn" style="padding: 12px 5px; font-size: 0.9rem;" onclick="selectPopupQuizBrand('Acer')">Acer</button>
+          <button class="brand-select-btn" style="padding: 12px 5px; font-size: 0.9rem;" onclick="selectPopupQuizBrand('MSI')">MSI</button>
+          <button class="brand-select-btn" style="padding: 12px 5px; font-size: 0.9rem;" onclick="selectPopupQuizBrand('DELL')">DELL</button>
+          <button class="brand-select-btn" style="padding: 12px 5px; font-size: 0.9rem;" onclick="selectPopupQuizBrand('Apple (Mac)')">Apple (Mac)</button>
+          <button class="brand-select-btn" style="padding: 12px 5px; font-size: 0.9rem;" onclick="selectPopupQuizBrand('Собственная сборка')">Сборный ПК</button>
+        </div>
+        <button class="quiz-skip-btn" onclick="selectPopupQuizBrand('Не указан')">Пропустить этот шаг ➔</button>
+      </div>
+
+      <!-- ШАГ 2: ОПИСАНИЕ ПОЛОМКИ -->
+      <div id="popup-quiz-step-2" class="quiz-step">
+        <h3 style="font-size: 1.5rem; font-weight: 700; color: #1a1a1a; margin-bottom: 5px;">Что именно случилось?</h3>
+        <p class="quiz-step-sub" style="margin-bottom: 20px; font-size: 0.9rem;">Опишите проблему своими словами</p>
+        
+        <textarea id="popup-quiz-problem-textarea" class="quiz-textarea" placeholder="Напишите здесь описание поломки..." style="margin-bottom: 20px; height: 100px;"></textarea>
+        
+        <div class="quiz-nav-buttons">
+          <button class="quiz-back-btn" onclick="changePopupQuizStep(1)">← Назад</button>
+          <button class="quiz-next-btn" onclick="submitPopupQuizStep2()">Далее ➔</button>
+        </div>
+      </div>
+
+      <!-- ШАГ 3: КОНТАКТНЫЕ ДАННЫЕ (ФИНАЛ) -->
+      <div id="popup-quiz-step-3" class="quiz-step">
+        <h3 style="font-size: 1.5rem; font-weight: 700; color: #1a1a1a; margin-bottom: 5px;">Оставьте контакты для связи</h3>
+        <p class="quiz-step-sub" style="margin-bottom: 20px; font-size: 0.9rem;">Мастер свяжется с вами в течение 10-15 минут</p>
+        
+        <div class="quiz-input-group" style="margin-bottom: 12px;">
+          <label style="font-size: 0.85rem;">Ваше имя</label>
+          <input type="text" id="popup-quiz-name" class="quiz-input" placeholder="Иван" style="padding: 12px 16px;">
+        </div>
+
+        <div class="quiz-input-group" style="margin-bottom: 20px;">
+          <label style="font-size: 0.85rem;">Номер телефона</label>
+          <input type="tel" id="popup-quiz-phone" class="quiz-input" placeholder="+7 (999) 000-00-00" style="padding: 12px 16px;">
+        </div>
+        
+        <div class="quiz-nav-buttons">
+          <button class="quiz-back-btn" onclick="changePopupQuizStep(2)">← Назад</button>
+          <button class="quiz-submit-btn" id="popup-quiz-submit-btn" onclick="sendPopupQuizToSupabase()">Отправить заявку ⚡</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<!-- ==========================================
+     ФИНАЛЬНЫЙ БЛОК: КОНТАКТЫ И ФУТЕР
+     ========================================== -->
+<section class="repair-contacts-section" id="contacts">
+  <div class="repair-contacts-container">
+    
+    <!-- Левая карточка с контактами -->
+    <div class="contacts-info-card">
+      <h2>Наши контакты</h2>
+      <p class="contacts-subtitle">Свяжитесь с нами любым удобным для вас способом</p>
+      
+      <div class="contacts-list">
+        <div class="contact-row-item">
+          <span class="contact-icon">📍</span>
+          <span class="contact-text">г. Тюмень, ул. Широтная 148, корп 1</span>
+        </div>
+        <div class="contact-row-item">
+          <span class="contact-icon">📞</span>
+          <a href="tel:+79222624705" class="contact-text phone-link">+7 (922) 262-47-05</a>
+        </div>
+        <div class="contact-row-item">
+          <span class="contact-icon">🕒</span>
+          <span class="contact-text">Ежедневно с 08:00 до 22:00 <br><small style="color: #6c757d;">По предварительной записи</small></span>
+        </div>
+        <div class="contact-row-item">
+          <span class="contact-icon">✉️</span>
+          <a href="mailto:info@remonto-service.ru" class="contact-text email-link">info@remonto-service.ru</a>
+        </div>
+      </div>
+
+      <!-- Кнопка вызывает простое окно на 2 поля, которое мы настроили для прайса -->
+      <button class="contacts-action-btn" onclick="openQuizFromPrice()">Связаться со мной</button>
+    </div>
+
+    <!-- Правая зона под Яндекс.Карту -->
+    <div class="contacts-map-box" id="map">
+      <!-- Сюда позже просто вставите скрипт или iframe от Яндекс.Карт -->
+      <div class="map-placeholder">
+        <span>🗺️ Место под Яндекс.Карту</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ЧЕРНЫЙ ФУТЕР (ПОДВАЛ САЙТА) -->
+<footer class="repair-main-footer">
+  <div class="footer-container">
+    
+    <!-- Блок 1: Логотип -->
+    <div class="footer-block brand-block">
+      <div class="footer-logo">РемонтТех<span class="logo-dot">.</span></div>
+      <p class="footer-copy">© 2026 РемонтТех. Все права защищены</p>
+    </div>
+
+    <!-- Блок 2: Меню навигации (Ведет на главную) -->
+    <div class="footer-block menu-block">
+      <h4>МЕНЮ</h4>
+      <ul class="footer-links">
+        <li><a href="../index.html">В начало</a></li>
+        <li><a href="../index.html#services">Что ремонтируем?</a></li>
+        <li><a href="../index.html#about-details">Преимущества</a></li>
+        <li><a href="../index.html#reviews">Отзывы</a></li>
+        <li><a href="../index.html#faq">Вопросы</a></li>
+      </ul>
+    </div>
+
+    <!-- Блок 3: Данные мастерской -->
+    <div class="footer-block info-block">
+      <h4>МАСТЕРСКАЯ</h4>
+      <p>📍 г. Тюмень, ул. Широтная 148, корп 1</p>
+      <p>🕒 08:00 - 22:00, без выходных</p>
+      <p class="footer-phone">📞 +7 (922) 262-47-05</p>
+    </div>
+
+  </div>
+</footer>
+</body>
+</html>

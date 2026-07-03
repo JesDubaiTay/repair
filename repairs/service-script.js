@@ -136,84 +136,8 @@ function filterCatalog(category, buttonElement) {
     }
   });
 }
-const reviewsData = [
-  { name: "Игорь К.", date: "12 мая 2026", device: "Телевизор LG", text: "Перестал включаться экран, звук шел. Принес в РемонтТех, через 2 часа перезвонили — сгорела подсветка. Сделали за день, цена адекватная, дали гарантию.", rating: 5 },
-  { name: "Анна Миронова", date: "28 апреля 2026", device: "Ноутбук ASUS", text: "Ноутбук начал жутко тормозить и греться как утюг. Мастер провел чистку, заменил термопасту прямо при мне за полчаса. Теперь летает и работает тихо!", rating: 5 },
-  { name: "Дмитрий Л.", date: "15 апреля 2026", device: "iPhone 13", text: "Разбил стекло на айфоне, думал придется менять весь модуль за огромные деньги. В РемонтТех смогли переклеить только само стекло! Сэкономил кучу денег.", rating: 5 },
-  { name: "Ольга Чехова", date: "4 апреля 2026", device: "Телевизор Samsung", text: "Экран пошел полосами после грозы. Думала всё, на свалку. Мастер поколдовал над платой питания, что-то перепаял. Телевизор снова как новый, спасибо!", rating: 5 },
-  { name: "Сергей Волк", date: "22 марта 2026", device: "Компьютер (ПК)", text: "Компьютер перестал загружаться, выдавал синий экран. Привез ребятам. Быстро нашли битую планку оперативки, заменили, почистили от пыли. Отличный сервис.", rating: 5 },
-  { name: "Мария П.", date: "11 марта 2026", device: "Планшет iPad", text: "Сын расшатал гнездо зарядки, планшет перестал заряжаться. Поменяли разъем за пару часов. Заодно проконсультировали по защитному стеклу. Рекомендую!", rating: 5 },
-  { name: "Артем Ребров", date: "3 марта 2026", device: "Монитор AOC", text: "Монитор гас через секунду после включения. Заменили конденсаторы в блоке питания. Быстро, недорого, без лишних навязанных услуг. Все честно.", rating: 5 },
-  { name: "Елена К.", date: "25 февраля 2026", device: "Робот-пылесос", text: "Пылесос крутился на одном месте и выдавал ошибку бампера. Починили за один день, цена очень порадовала. Буду обращаться еще с мелкой техникой.", rating: 5 },
-  { name: "Владимир Ш.", date: "14 февраля 2026", device: "Ноутбук Lenovo", text: "Залил клавиатуру кофе, половина кнопок залипла. Заменили клавиатуру на оригинальную. Сделали аккуратно, корпус без царапин после разборки.", rating: 5 },
-  { name: "Светлана", date: "2 февраля 2026", device: "Смартфон Xiaomi", text: "Батарея совсем перестала держать заряд, телефон выключался на 30%. Поменяли аккумулятор быстро, теперь снова держит заряд как новый весь день.", rating: 5 },
-  { name: "Павел Дуров", date: "20 января 2026", device: "Жесткий диск (HDD)", text: "Случайно удалил семейный архив фото с внешнего диска. Думал потерял навсегда. Специалист по восстановлению данных вернул абсолютно всё! Чудо какое-то.", rating: 5 },
-  { name: "Евгения Т.", date: "9 января 2026", device: "Микроволновка", text: "Искрила и трещала при включении. Оказалось, прогорела пластина слюды. Заменили за 15 минут в моем присутствии. Очень приятный и быстрый сервис.", rating: 5 },
-  { name: "Константин", date: "28 декабря 2025", device: "Игровая приставка PS5", text: "Консоль начала сильно шуметь в тяжелых играх. Ребята полностью ее обслужили, заменили жидкий металл. Работает теперь бесшумно, как из коробки.", rating: 5 },
-  { name: "Наталья В.", date: "15 декабря 2025", device: "Смартфон Samsung", text: "Уронила телефон в воду. Принесла сразу сюда, мастер оперативно разобрал, просушил в ультразвуковой ванне, восстановил дорожки. Телефон выжил!", rating: 5 },
-  { name: "Максим Г.", date: "3 декабря 2025", device: "Телевизор Philips", text: "Появились темные пятна по углам экрана. Сделали ремонт локальной подсветки. Картинка снова сочная, равномерная. Качественная работа профессионалов.", rating: 5 },
-  { name: "Юлия", date: "22 ноября 2025", device: "Наушники AirPods", text: "Один наушник стал играть тише другого. Оказалось, глубокое загрязнение сеточек. Почистили специальным средством, звук выровнялся. Быстро и дешево.", rating: 5 },
-  { name: "Иван Алексеевич", date: "10 ноября 2025", device: "ПК (Сборка)", text: "Обратился за помощью в сборке нового игрового ПК из моих комплектующих. Собрали шикарно, кабель-менеджмент идеальный, проверили под нагрузкой.", rating: 5 },
-  { name: "Кристина Р.", date: "30 октября 2025", device: "Электронная книга", text: "Экран застыл на одной странице и не реагировал на кнопки. Перепрошили девайс, теперь все работает плавно, книжка снова ожила.", rating: 4 },
-  { name: "Роман", date: "18 октября 2025", device: "Увлажнитель воздуха", text: "Перестал идти пар. Заменили ультразвуковую мембрану. Работа заняла пару часов, теперь в комнате снова комфортный микроклимат.", rating: 5 },
-  { name: "Олеся", date: "5 октября 2025", device: "Смартфон Honor", text: "Разбила камеру сзади, фотки были мутные. Заменили стеклышко камеры за полчаса. Фокус теперь ловит идеально, царапин на корпусе не оставили.", rating: 5 }
-];
 let currentSlideIndex = 0;
 let cardsPerPage = 3;
-
-// Функция инициализации отзывов
-function initReviewsSlider() {
-  const track = document.getElementById('reviews-track');
-  const dotsContainer = document.getElementById('slider-dots-container');
-  
-  // 1. Генерируем HTML карточек из нашего массива данных
-  let cardsHTML = '';
-  reviewsData.forEach(rev => {
-    let stars = '★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating);
-    cardsHTML += `
-      <div class="review-card">
-        <div class="review-user-info">
-          <div>
-            <div class="review-name">${rev.name}</div>
-            <div class="review-stars">${stars}</div>
-          </div>
-          <div class="review-date">${rev.date}</div>
-        </div>
-        <div class="review-device-tag">🔧 ${rev.device}</div>
-        <p class="review-text">${rev.text}</p>
-      </div>
-    `;
-  });
-  track.innerHTML = cardsHTML;
-
-  // 2. Вычисляем количество точек управления
-  updateCardsPerPage();
-  let totalDots = reviewsData.length - cardsPerPage + 1;
-  if(totalDots < 1) totalDots = 1;
-
-  let dotsHTML = '';
-  for(let i = 0; i < totalDots; i++) {
-    dotsHTML += `<span class="slider-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></span>`;
-  }
-  dotsContainer.innerHTML = dotsHTML;
-
-  // Слушаем изменение размеров экрана, чтобы слайдер не ломался
-  window.addEventListener('resize', () => {
-    updateCardsPerPage();
-    goToSlide(currentSlideIndex);
-  });
-}
-
-// Определяем, сколько карточек влезает на экран прямо сейчас
-function updateCardsPerPage() {
-  if (window.innerWidth <= 768) {
-    cardsPerPage = 1;
-  } else if (window.innerWidth <= 1100) {
-    cardsPerPage = 2;
-  } else {
-    cardsPerPage = 3;
-  }
-}
 
 // Функция прокрутки на шаг вперед/назад (+1 или -1)
 function moveSlider(direction) {
@@ -252,38 +176,158 @@ function goToSlide(index) {
     }
   });
 }
+// ==========================================================================
+// УПРАВЛЕНИЕ МОДАЛЬНЫМ МИНИ-КВИЗОМ (ИЗ БЛОКА ПОЛОМОК)
+// ==========================================================================
 
-// Запуск слайдера и настройка тач-событий для мобилок
-document.addEventListener("DOMContentLoaded", () => {
-  initReviewsSlider();
+function openQuizPopupModal() {
+  // Фиксируем точный кастомный источник для вашей таблицы orders
+  quizDraftOrder.deviceType = "Ремонт компьютеров";
+  quizDraftOrder.source = "Кнопка в блоке поломок, раздел компьютеры";
+  console.log("Источник зафиксирован для всплывающего квиза:", quizDraftOrder.source);
 
-  const viewport = document.querySelector('.slider-viewport');
-  let touchStartX = 0;
-  let touchEndX = 0;
+  // Сбрасываем попап-квиз на 1 шаг перед открытием
+  changePopupQuizStep(1);
+  if (document.getElementById('popup-quiz-problem-textarea')) document.getElementById('popup-quiz-problem-textarea').value = '';
+  if (document.getElementById('popup-quiz-name')) document.getElementById('popup-quiz-name').value = '';
+  if (document.getElementById('popup-quiz-phone')) document.getElementById('popup-quiz-phone').value = '';
 
-  // Фиксируем, где палец коснулся экрана
-  viewport.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-  }, { passive: true });
+  const modal = document.getElementById('quiz-popup-modal');
+  if (modal) {
+    modal.style.setProperty('display', 'flex', 'important');
+  }
+}
 
-  // Фиксируем, где палец оторвался от экрана
-  viewport.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-  }, { passive: true });
+function closeQuizPopupModal() {
+  const modal = document.getElementById('quiz-popup-modal');
+  if (modal) {
+    modal.style.setProperty('display', 'none', 'important');
+  }
+}
 
-  // Логика определения направления свайпа
-  function handleSwipe() {
-    const swipeThreshold = 50; // Минимальная длина свайпа в пикселях
-    if (touchStartX - touchEndX > swipeThreshold) {
-      // Свайп влево — крутим вперед
-      moveSlider(1);
-    } else if (touchEndX - touchStartX > swipeThreshold) {
-      // Свайп вправо — крутим назад
-      moveSlider(-1);
+function changePopupQuizStep(stepNumber) {
+  // Скрываем все шаги всплывающего квиза
+  document.getElementById('popup-quiz-step-1').classList.remove('active');
+  document.getElementById('popup-quiz-step-2').classList.remove('active');
+  document.getElementById('popup-quiz-step-3').classList.remove('active');
+  
+  // Показываем нужный шаг
+  document.getElementById(`popup-quiz-step-${stepNumber}`).classList.add('active');
+  
+  const progressLine = document.getElementById('popup-quiz-progress-line');
+  const stepIndicator = document.getElementById('popup-quiz-step-indicator');
+  
+  if (!progressLine || !stepIndicator) return;
+
+  if (stepNumber === 1) {
+    progressLine.style.width = '33.3%';
+    stepIndicator.innerText = 'Шаг 1 из 3';
+  } else if (stepNumber === 2) {
+    progressLine.style.width = '66.6%';
+    stepIndicator.innerText = 'Шаг 2 из 3';
+  } else if (stepNumber === 3) {
+    progressLine.style.width = '100%';
+    stepIndicator.innerText = 'Шаг 3 из 3';
+  }
+}
+
+function selectPopupQuizBrand(brandName) {
+  quizDraftOrder.brand = brandName;
+  console.log("Всплывающий квиз — выбран бренд:", brandName);
+  changePopupQuizStep(2);
+}
+
+function submitPopupQuizStep2() {
+  const textVal = document.getElementById('popup-quiz-problem-textarea').value.trim();
+  quizDraftOrder.initialProblem = textVal;
+  changePopupQuizStep(3);
+}
+// Отправка данных всплывающего мини-квиза в таблицу 'orders'
+async function sendPopupQuizToSupabase() {
+  const nameInp = document.getElementById('popup-quiz-name').value.trim();
+  const phoneInp = document.getElementById('popup-quiz-phone').value.trim();
+
+  if (nameInp === "" || phoneInp === "") {
+    alert("Пожалуйста, заполните поля 'Имя' и 'Номер телефона'!");
+    return;
+  }
+
+  quizDraftOrder.clientName = nameInp;
+  quizDraftOrder.clientPhone = phoneInp;
+
+  const submitBtn = document.getElementById('popup-quiz-submit-btn');
+  if (submitBtn) {
+    submitBtn.innerText = "Отправка...";
+    submitBtn.disabled = true;
+  }
+
+  try {
+    console.log("Отправка всплывающего мини-квиза в Supabase (Таблица orders):", quizDraftOrder);
+
+    // Жестко синхронизируем со структурой вашей таблицы 'orders' из 4-й части кода
+    const { data, error } = await supabase
+      .from('orders') // Имя вашей таблицы квизов
+      .insert([
+        { 
+          client_name: quizDraftOrder.clientName, // Точное имя столбца из вашей БД
+          client_phone: quizDraftOrder.clientPhone, // Точное имя столбца из вашей БД
+          device_type: quizDraftOrder.deviceType || "Ремонт компьютеров",
+          initial_problem: `Бренд: ${quizDraftOrder.brand || 'Не выбран'}. Поломка (из всплывающего окна): ${quizDraftOrder.initialProblem || 'Нет описания'}`,
+          source: quizDraftOrder.source // Сюда динамически запишется точный источник!
+        }
+      ]);
+
+    if (error) throw error; 
+
+    alert("Заявка успешно отправлена через мини-квиз! Мастер свяжется с вами.");
+    closeQuizPopupModal(); // Закрываем всплывающее окно
+
+  } catch (err) {
+    console.error("Ошибка Supabase при отправке всплывающего квиза:", err);
+    alert(`Ошибка Supabase: ${err.message || JSON.stringify(err)}`);
+  } finally {
+    if (submitBtn) {
+      submitBtn.innerText = "Отправить заявку ⚡";
+      submitBtn.disabled = false;
     }
   }
+}
+
+// НАЙДИТЕ ЭТОТ БЛОК В САМОМ НИЗУ СВОЕГО service-script.js И ЗАМЕНИТЕ НА ЭТОТ:
+document.addEventListener("DOMContentLoaded", () => {
+  // Свайпы для отзывов (вызов initReviewsSlider удален, чтобы не вешать скрипт!)
+  const viewport = document.querySelector('.slider-viewport');
+  if (viewport) {
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    viewport.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches.screenX;
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches.screenX;
+      
+      const swipeThreshold = 50;
+      if (touchStartX - touchEndX > swipeThreshold) {
+        moveSlider(1);  
+      } else if (touchEndX - touchStartX > swipeThreshold) {
+        moveSlider(-1); 
+      }
+    }, { passive: true });
+  }
+
+  // Автоматический подхват при переходе с главной страницы
+  const savedType = localStorage.getItem('selectedDeviceType');
+  if (savedType === 'Ремонт компьютеров') {
+    localStorage.removeItem('selectedDeviceType');
+    
+    quizDraftOrder.source = "Поиск на главной, раздел компьютеры";
+    quizDraftOrder.deviceType = "Ремонт компьютеров";
+    console.log("Пользователь перешел с поиска главной. Источник квиза:", quizDraftOrder.source);
+  }
 });
+
 function toggleFaq(element) {
   // Проверяем, открыт ли текущий элемент
   const isOpen = element.classList.contains('active');
@@ -439,5 +483,80 @@ async function sendQuizToSupabase() {
   } finally {
     submitBtn.innerText = "Отправить заявку ⚡";
     submitBtn.disabled = false;
+  }
+}
+// Открытие модального окна из Прайс-листа
+function openQuizFromPrice() {
+  // 1. Фиксируем данные в объекте простых форм draftOrder
+  draftOrder.deviceType = "Ремонт компьютеров";
+  draftOrder.source = "Узнать стоимость ремонта, раздел компьютеры"; // Наш точный источник
+
+  // 2. Показываем модальное окно
+  const priceModal = document.getElementById('price-callback-modal');
+  if (priceModal) {
+    priceModal.style.display = 'flex';
+  }
+}
+
+// Закрытие модального окна прайса
+function closePriceModal() {
+  const priceModal = document.getElementById('price-callback-modal');
+  if (priceModal) {
+    priceModal.style.display = 'none';
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Проверяем, есть ли в памяти сохраненный выбор
+    const savedType = localStorage.getItem('selectedDeviceType');
+    
+    if (savedType === 'Ремонт компьютеров') {
+        console.log("Пользователь перешел на страницу ПК. Автоматически запускаем квиз...");
+        
+        // Очищаем запись, чтобы квиз не всплывал бесконечно при простой перезагрузке страницы
+        localStorage.removeItem('selectedDeviceType');
+        
+        // Вызываем функцию открытия вашего квиза (подставьте имя вашей функции, например openQuizOrForm)
+        if (typeof openQuizOrForm === "function") {
+            openQuizOrForm();
+        }
+
+    }
+});
+// Отправка простой формы из прайс-листа в Supabase
+async function sendPriceLeadToSupabase() {
+  const clientName = document.getElementById('modal-callback-name').value;
+  const clientPhone = document.getElementById('modal-callback-phone').value;
+
+  if (!clientPhone) {
+    alert("Пожалуйста, введите номер телефона");
+    return;
+  }
+
+  try {
+    // ПОДСТАВЬТЕ НАЗВАНИЕ ВАШЕЙ ТАБЛИЦЫ вместо 'leads'
+    const { data, error } = await supabase
+      .from('leads') 
+      .insert([
+        { 
+          name: clientName, 
+          phone: clientPhone,
+          device_type: draftOrder.deviceType, // "Ремонт компьютеров"
+          source: draftOrder.source // "Узнать стоимость ремонта, раздел компьютеры"
+        }
+      ]);
+
+    if (error) throw error;
+
+    alert("Заявка успешно отправлена! Мастер свяжется с вами.");
+    closePriceModal();
+    
+    // Сбрасываем поля
+    document.getElementById('modal-callback-name').value = "";
+    document.getElementById('modal-callback-phone').value = "";
+
+  } catch (err) {
+    console.error("Ошибка отправки в Supabase:", err);
+    alert("Произошла ошибка при отправке.");
   }
 }
