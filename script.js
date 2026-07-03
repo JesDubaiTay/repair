@@ -52,20 +52,29 @@ function filterServices(category, buttonElement) {
 }
 
 // Выбор конкретной услуги из шторки
+// ОБНОВЛЕННАЯ ФУНКЦИЯ В КОРНЕВОМ SCRIPT.JS (НА ГЛАВНОЙ СТРАНИЦЕ)
 function selectDeviceType(typeName) {
-  draftOrder.deviceType = typeName;
-  console.log("Черновик обновлен (Тип техники):", draftOrder);
-  toggleServicesMenu(); // Закрываем шторку
+  // 1. Сохраняем черновик и тип техники в память браузера
+  if (typeof draftOrder !== 'undefined') {
+    draftOrder.deviceType = typeName;
+    console.log("Черновик обновлен на главной:", draftOrder);
+  }
   
-  // 1. Сохраняем выбранный тип техники в память браузера, чтобы не потерять при переходе
+  // Сохраняем маркер для автоскролла/автозапуска на новой странице
   localStorage.setItem('selectedDeviceType', typeName);
 
-  // 2. Проверяем, создана ли уже отдельная страница под эту технику
+  // 2. ЖЕСТКОЕ ПЕРЕНАПРАВЛЕНИЕ НА НОВУЮ СТРАНИЦУ ПК
   if (typeName === 'Ремонт компьютеров') {
+      // Закрываем меню (если функция toggleServicesMenu существует на главной)
+      if (typeof toggleServicesMenu === "function") toggleServicesMenu();
+      
+      // Переходим по относительному пути (без слэша в начале — для GitHub Pages это закон)
       window.location.href = 'repairs/kompyutery.html';
-      return;
+      return; // Останавливаем функцию, чтобы не вылетал старый alert
   }
-  // Если для какой-то техники страницы еще нет, оставляем вашу старую логику заглушки
+  
+  // Ниже остается ваша старая логика заглушки для остальной техники
+  if (typeof toggleServicesMenu === "function") toggleServicesMenu();
   alert(`Выбран ремонт: ${typeName}. Логика квиза сработает здесь.`);
 }
 
