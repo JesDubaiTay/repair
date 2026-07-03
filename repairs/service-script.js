@@ -69,8 +69,9 @@ function selectDeviceType(typeName) {
   alert(`Выбран ремонт: ${typeName}. Логика квиза сработает здесь.`);
 }
 
+// ИСПРАВЛЕННАЯ ФУНКЦИЯ ДЛЯ ВСПЛЫВАЮЩЕГО ОКНА ИЗ ИНПУТА ПК
 function startQuizFromHero() {
-  // 1. Забираем текст из инпута на главном экране
+  // 1. Забираем текст из инпута на главном экране страницы ПК
   const heroInput = document.getElementById('initial-problem');
   if (!heroInput) return;
 
@@ -81,27 +82,33 @@ function startQuizFromHero() {
     return;
   }
 
-  // 2. Записываем в наш единый глобальный объект квиза
+  // 2. Записываем текст в глобальный объект квиза
   quizDraftOrder.initialProblem = problemText;
+  quizDraftOrder.deviceType = "Ремонт компьютеров";
   
-  // Устанавливаем источник, чтобы в админке было видно, откуда пришел лид
-  quizDraftOrder.source = "Главный экран (Инпут)";
+  // Переписываем источник для Supabase, чтобы знать, что лид пришел именно из строки ввода
+  quizDraftOrder.source = "Инпут на первом экране, раздел компьютеры"; 
+  console.log("Проблема зафиксирована:", quizDraftOrder.initialProblem);
 
-  // ЛАЙФХАК: Синхронизируем текст с текстовым полем внутри квиза на Шаге 2, 
-  // чтобы функция submitQuizStep2() потом случайно не затерла его пустотой!
-  const quizTextarea = document.getElementById('quiz-problem-textarea');
-  if (quizTextarea) {
-    quizTextarea.value = problemText;
+  // 3. Синхронизируем текст с textarea ВСПЛЫВАЮЩЕГО (popup) квиза
+  const popupTextarea = document.getElementById('popup-quiz-problem-textarea');
+  if (popupTextarea) {
+    popupTextarea.value = problemText;
   }
 
-  // 3. Выводим ваше сообщение и открываем квиз
-  alert(`Проблема "${problemText}" записана! Переходим к выбору бренда.`);
-  
-  // Открываем модальное окно квиза
-  if (typeof openQuizModal === "function") {
-    openQuizModal();
-    // Переключаем сразу на шаг 1 (выбор бренда), так как проблему мы уже зафиксировали
-    changeQuizStep(1); 
+  // 4. Открываем всплывающее модальное окно мини-квиза
+  const modal = document.getElementById('quiz-popup-modal');
+  if (modal) {
+    modal.style.setProperty('display', 'flex', 'important');
+  } else {
+    console.error("Окно #quiz-popup-modal не найдено в HTML!");
+  }
+
+  // 5. Переключаем всплывающий квиз сразу на Шаг 1 (Выбор бренда)
+  // Пользователь сначала выберет бренд (ASUS, HP и т.д.), кликнет на него,
+  // и квиз перекинет его на Шаг 2, где уже будет красиво лежать слово "Комп"
+  if (typeof changePopupQuizStep === "function") {
+    changePopupQuizStep(1); 
   }
 }
 
@@ -523,30 +530,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 });
-// Отправка простой формы из прайс-листа в Supabase
+// ИСПРАВЛЕННАЯ ФУНКЦИЯ ОТПРАВКИ ИЗ ПРАЙС-ЛИСТА В ТАБЛИЦУ 'ORDERS'
 async function sendPriceLeadToSupabase() {
-  const clientName = document.getElementById('modal-callback-name').value;
-  const clientPhone = document.getElementById('modal-callback-phone').value;
+  const nameInp = document.getElementById('modal-callback-name').value.trim();
+  const phoneInp = document.getElementById('modal-callback-phone').value.trim();
 
-  if (!clientPhone) {
-    alert("Пожалуйста, введите номер телефона");
+  if (phoneInp === "") {
+    alert("Пожалуйста, введите номер телефона!");
     return;
   }
 
+  // Заглушка, если имя не введено
+  const validName = nameInp || "Не указано";
+
   try {
-    // ПОДСТАВЬТЕ НАЗВАНИЕ ВАШЕЙ ТАБЛИЦЫ вместо 'leads'
+    console.log("Отправка быстрой формы в общую таблицу orders:", {
+      client_name: validName,
+      client_phone: phoneInp,
+      device_type: draftOrder.deviceType,
+      source: draftOrder.source
+    });
+
+    // ШЛЁМ СТРОГО В ТАБЛИЦУ 'ORDERS' С РОДНЫМИ НАЗВАНИЯМИ СТОЛБЦОВ
     const { data, error } = await supabase
-      .from('leads') 
+      .from('orders') // Ваша единая таблица для всех заявок сайта
       .insert([
         { 
-          name: clientName, 
-          phone: clientPhone,
-          device_type: draftOrder.deviceType, // "Ремонт компьютеров"
-          source: draftOrder.source // "Узнать стоимость ремонта, раздел компьютеры"
+          client_name: validName, 
+          client_phone: phoneInp,
+          device_type: draftOrder.deviceType || "Ремонт компьютеров", 
+          
+          // Спасаем от ошибки NOT NULL: пишем понятный текст поломки для мастера
+          initial_problem: "Быстрая заявка: клиент хочет узнать стоимость ремонта по телефону.",
+          
+          // Передаем точный источник для сквозной аналитики
+          source: draftOrder.source || "Узнать стоимость ремонта, раздел компьютеры"
         }
       ]);
 
-    if (error) throw error;
+    if (error) {
+      throw error; // Передаем ошибку в блок catch для разбора
+    }
 
     alert("Заявка успешно отправлена! Мастер свяжется с вами.");
     closePriceModal();
@@ -556,7 +580,8 @@ async function sendPriceLeadToSupabase() {
     document.getElementById('modal-callback-phone').value = "";
 
   } catch (err) {
-    console.error("Ошибка отправки в Supabase:", err);
-    alert("Произошла ошибка при отправке.");
+    console.error("Критическая ошибка Supabase (Таблица orders):", err);
+    // Выводим подробный текст ошибки от Supabase, чтобы сразу понять, в чем дело
+    alert(`Ошибка при отправке: ${err.message || JSON.stringify(err)}`);
   }
 }
