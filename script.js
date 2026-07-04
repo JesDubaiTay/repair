@@ -63,19 +63,46 @@ function selectDeviceType(typeName) {
   // Сохраняем маркер для автоскролла/автозапуска на новой странице
   localStorage.setItem('selectedDeviceType', typeName);
 
-  // 2. ЖЕСТКОЕ ПЕРЕНАПРАВЛЕНИЕ НА НОВУЮ СТРАНИЦУ ПК
-  if (typeName === 'Ремонт компьютеров') {
-      // Закрываем меню (если функция toggleServicesMenu существует на главной)
-      if (typeof toggleServicesMenu === "function") toggleServicesMenu();
-      
-      // Переходим по относительному пути (без слэша в начале — для GitHub Pages это закон)
-      window.location.href = 'repairs/kompyutery.html';
-      return; // Останавливаем функцию, чтобы не вылетал старый alert
-  }
-  
-  // Ниже остается ваша старая логика заглушки для остальной техники
+  // Закрываем меню (если функция toggleServicesMenu существует на главной)
   if (typeof toggleServicesMenu === "function") toggleServicesMenu();
-  alert(`Выбран ремонт: ${typeName}. Логика квиза сработает здесь.`);
+
+  // 2. ПЕРЕНАПРАВЛЕНИЕ НА СООТВЕТСТВУЮЩУЮ СТРАНИЦУ
+  switch (typeName) {
+    case 'Ремонт компьютеров':
+      window.location.href = 'repairs/kompyutery.html';
+      break;
+    case 'Ремонт ноутбуков':
+      window.location.href = 'repairs/noutbuki.html';
+      break;
+    case 'Ремонт игровых приставок':
+      window.location.href = 'repairs/pristavki.html';
+      break;
+    case 'Ремонт телевизоров':
+      window.location.href = 'repairs/televizory.html';
+      break;
+    case 'Ремонт ресиверов':
+      window.location.href = 'repairs/resiveri.html';
+      break;
+    case 'Ремонт микроволновок':
+      window.location.href = 'repairs/mikrovolnovki.html';
+      break;
+    case 'Ремонт отпаривателей':
+      window.location.href = 'repairs/otparivateli.html';
+      break;
+    case 'Ремонт пылесосов и роботов-пылесосов':
+      window.location.href = 'repairs/pylesosy.html';
+      break;
+    case 'Ремонт электроинструмента':
+      window.location.href = 'repairs/elektroinstrument.html';
+      break;
+    case 'Ремонт плат и блоков питания':
+      window.location.href = 'repairs/platy-i-bp.html';
+      break;
+      
+    default:
+      // Логика заглушки на случай, если название карточки не совпало
+      alert(`Выбран ремонт: ${typeName}. Логика квиза сработает здесь.`);
+  }
 }
 
 function startQuizFromHero() {

@@ -1410,191 +1410,475 @@ body {
   font-size: 15px;
 }
 .quiz-input:focus { border-color: var(--accent-green); }
-
-@media (max-width: 600px) {
-  .brands-grid { grid-template-columns: repeat(2, 1fr); }
-  .quiz-card { padding: 24px; }
+/* 1. Запрещаем всему сайту и главному контейнеру скроллиться по горизонтали */
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
-
-/* Адаптация под экраны телефонов */
+/* ==========================================================================
+   ЕДИНЫЙ МОБИЛЬНЫЙ БЛОК АДАПТИВНОСТИ (ВСТАВИТЬ В САМЫЙ КОНЕЦ ФАЙЛА)
+   ========================================================================== */
 @media (max-width: 768px) {
-  .footer-container {
-    flex-direction: column; /* Выстраиваем колонки строго вертикально */
-    gap: 35px;
-  }
-  .main-footer {
-    padding: 40px 20px;
-  }
-  .footer-info {
-    max-width: 100%;
-  }
-}
-
-/* Адаптивность для планшетов и телефонов */
-@media (max-width: 900px) {
-  .contacts-content {
-    flex-direction: column; /* Перестраиваем в одну колонку */
-    align-items: initial;
-  }
-  .contacts-info-card {
-    max-width: 100%; /* Карточка занимает всю ширину */
-  }
-  .map-placeholder {
-    height: 350px; /* Снижаем высоту карты на мобилках */
-    min-height: auto;
-  }
-  .contacts-section {
-    padding: 50px 20px;
-  }
-}
-
-/* АДАПТИВНОСТЬ */
-@media (max-width: 900px) {
-  /* На планшетах и мобилках перестраиваем 2х2 в одну вертикальную ленту */
-  .faq-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .faq-section {
-    padding: 50px 20px;
-  }
-}
-
-@media (max-width: 768px) {
-  /* Карточка отзыва занимает ровно 100% ширины экрана смартфона */
-  .review-card {
-    flex: 0 0 100%;
-    padding: 20px;
-    min-height: auto; /* Чтобы высота подстраивалась под текст */
-  }
-
-  /* Сдвигаем стрелочки на мобилках в удобное место */
-  .slider-controls {
-    justify-content: space-between; /* Распределяем элементы */
-    padding: 0 10px;
-    margin-top: 15px;
-  }
-
-  /* Делаем стрелочки чуть меньше для пальца */
-  .slider-arrow {
-    width: 40px;
-    height: 40px;
-    font-size: 14px;
-  }
-
-  /* Точки-индикаторы (полоски) внизу делаем чуть компактнее */
-  .slider-dots {
-    gap: 6px;
-  }
   
-  .slider-dot {
-    width: 6px;
-    height: 6px;
+  /* 1. БЛОКИРОВКА ЖЕСТКОГО БОКОВОГО СКРОЛЛА */
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding-top: 130px !important; /* Увеличиваем отступ сверху на мобилках под новую высоту шапки */
   }
-  
-  .slider-dot.active {
-    width: 16px;
-  }
-}
 
-@media (max-width: 768px) {
-  .reviews-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
+  /* 2. АДАПТАЦИЯ СЕТОК КАТАЛОГА И ШТОРКИ (Строго по 2 карточки в ряд) */
+  .catalog-grid, .services-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* Делим ровно пополам */
+    gap: 12px !important;
+    padding: 0 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
-  .reviews-header h2 { font-size: 28px; }
-  /* На мобильных телефонах — строго 1 карточка на весь экран */
-  .review-card { flex: 0 0 100%; padding: 24px; }
-  .reviews-section { padding: 50px 20px; }
-}
 
-/* Адаптивность для планшетов и телефонов */
-@media (max-width: 1200px) {
-  .features-grid {
-    grid-template-columns: repeat(2, 1fr); /* На планшетах превращается в плитку 2х2 */
+  /* Сбрасываем лишние флексы и ширину у карточек услуг */
+  .catalog-card, .service-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 16px !important; /* Чуть компактнее отступы внутри карточки */
+    border-radius: 16px !important;
+    box-sizing: border-box !important;
   }
-  .feature-square-card {
-    aspect-ratio: auto; /* Убираем жесткий квадрат, чтобы крупный текст не зажало по высоте */
-    min-height: 280px;
-  }
-}
 
-@media (max-width: 650px) {
-  .about-features-section {
-    padding: 50px 20px;
+  .catalog-card .image-placeholder {
+    height: 120px !important; /* Уменьшаем высоту картинки, чтобы карточка не была огромной */
+    margin: 12px 0 !important;
   }
-  .features-header h2 {
-    font-size: 28px;
-  }
-  .features-grid {
-    grid-template-columns: 1fr; /* На мобилке строго вертикально в один ряд */
-    gap: 16px;
-  }
-  .feature-square-card {
-    padding: 25px;
-    min-height: auto;
-  }
-}
-@media (max-width: 650px) {
-  .about-features-section {
-    padding: 50px 20px;
-  }
-  .features-header h2 {
-    font-size: 26px;
-  }
-  .features-grid {
-    grid-template-columns: 1fr; /* В один вертикальный ряд */
-    gap: 20px;
-  }
-  .feature-square-card {
-    padding: 25px;
-    min-height: auto;
-  }
-}
 
-/* Адаптивность для каталога */
-@media (max-width: 1024px) {
-  .catalog-grid { grid-template-columns: repeat(2, 1fr); } /* По 2 в ряд на планшетах */
-}
-
-@media (max-width: 650px) {
+  /* Шапка каталога (заголовок сверху, фильтры снизу) */
   .catalog-header {
-    flex-direction: column; /* На мобилке заголовок и табы встают друг под друга */
-    align-items: flex-start;
-    gap: 20px;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+    padding: 0 16px !important;
   }
-  .catalog-grid { grid-template-columns: 1fr; } /* В одну колонку на мобильных */
-  .catalog-section { padding: 40px 20px; }
-}
-/* Адаптивность под планшеты и мобилки */
-@media (max-width: 1024px) {
-  .advantages-container {
-    flex-wrap: wrap; /* Разрешаем перенос на новые строки */
+
+  /* Кнопки-табы в каталоге перестраиваем вертикально друг под другом */
+  .catalog-header .tabs-container {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 8px !important;
   }
-  .adv-card {
-    flex: calc(50% - 10px); /* По 2 карточки в ряд */
+
+  .catalog-header .tab-btn {
+    width: 100% !important;
+    text-align: center !important;
+    padding: 12px 20px !important; /* Удобный размер для нажатия пальцем */
   }
-}
-@media (max-width: 600px) {
+
+  /* 3. НАСТРОЙКА ВСПЛЫВАЮЩЕЙ ПАНЕЛИ УСЛУГ И ЖЕЛЕЗНЫЙ КРЕСТИК */
+  #services-panel, .services-dropdown {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 99999 !important; /* Поверх абсолютно всего */
+    background: #E6E9E7 !important; /* Ваш плотный фирменный хвойно-серый тон */
+    overflow-y: auto !important; /* Разрешаем только вертикальный скролл меню */
+    padding: 80px 0 40px 0 !important; /* Принудительный отступ сверху освобождает место под крестик */
+    box-sizing: border-box !important;
+  }
+
+  .services-container {
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Кнопки фильтров внутри шторки тоже выстраиваем друг под другом */
+  .services-dropdown .tabs-container {
+    flex-direction: column !important;
+    padding: 0 16px !important;
+    width: 100% !important;
+    gap: 8px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .services-dropdown .tab-btn {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+ .header-container {
+    z-index: 1000000 !important;
+  }
+
+  /* Находим кнопку закрытия в шапке и гарантируем её видимость */
+  .header-container button[onclick*="toggle"],
+  .header-container .close-btn,
+  .header-container .btn-close,
+  .header-container .close-services-menu {
+    position: relative !important;
+    z-index: 1000001 !important; /* Ставим слой выше, чем у серой шторки */
+    display: inline-flex !important;
+  }
+
+  /* Опускаем контент внутри шторки ниже, чтобы он начинался СРАЗУ ПОД вашей шапкой */
+  #services-panel, .services-dropdown {
+    padding-top: 140px !important; /* Даем 140px воздуха сверху под шапку и кнопку «Закрыть» */
+    box-sizing: border-box !important;
+  }
+
+  /* 4. БЛОК ПРЕИМУЩЕСТВ (Строго друг под другом) */
   .advantages-section {
-    padding: 40px 20px;
+    padding: 50px 0 !important; /* Уменьшаем гигантские отступы секции */
   }
+
   .advantages-container {
-    flex-direction: column; /* На мобилке выстраиваем строго в один ряд вертикально */
+    flex-direction: column !important; /* Разворачиваем флекс в вертикальную стопку */
+    gap: 16px !important;
+    padding: 0 16px !important;
   }
-  .adv-card {
-    width: 100%;
+
+  .advantages-container .adv-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    margin: 0 !important;
+    height: auto !important;
+    min-height: auto !important; /* Отключаем десктопное ограничение */
+    padding: 20px !important;
+  }
+
+  .advantages-container .text-card {
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  .advantages-container .speech-bubble {
+    margin-bottom: 20px !important;
+    width: 100% !important;
+  }
+
+  .advantages-container .adv-image-box {
+    height: 130px !important; /* Ограничиваем высоту зоны картинок, чтобы они не раздувались */
+    margin-bottom: 12px !important;
+  }
+
+  /* 5. БЛОК О НАШЕМ ПОДХОДЕ (Плитки-квадраты .features-grid) */
+  .about-features-section {
+    padding: 50px 0 !important;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr !important; /* На смартфонах строго по 1 в ряд */
+    gap: 16px !important;
+    padding: 0 16px !important;
+  }
+
+  .feature-square-card {
+    aspect-ratio: auto !important; /* Отключаем жесткий квадрат десктопа, чтобы контент не вылезал наружу */
+    padding: 24px !important;
+    width: 100% !important;
+  }
+
+  /* 6. СЛАЙДЕР ОТЗЫВОВ НА МОБИЛЬНЫХ */
+  .reviews-section {
+    padding: 50px 0 !important;
+  }
+
+  .reviews-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+    padding: 0 16px !important;
+  }
+
+  .review-card {
+    flex: 0 0 85% !important; /* Одна карточка занимает 85% экрана, а кусок следующей торчит сбоку (показывает, что можно листать) */
+    min-height: auto !important;
+    padding: 20px !important;
+  }
+
+  /* 7. АККОРДЕОНЫ FAQ (По одному в ряд) */
+  .faq-section {
+    padding: 50px 0 !important;
+  }
+
+  .faq-grid {
+    grid-template-columns: 1fr !important; /* Выстраиваем вопросы в одну линию */
+    gap: 12px !important;
+    padding: 0 16px !important;
+  }
+
+  .faq-item {
+    padding: 16px 20px !important;
+  }
+
+  .faq-question {
+    font-size: 15px !important; /* Чуть уменьшаем шрифт для мобильных дисплеев */
+  }
+
+  /* 8. БЛОК КОНТАКТОВ С КАРТОЙ */
+  .contacts-section {
+    padding: 50px 0 !important;
+  }
+
+  .contacts-header {
+    padding: 0 16px !important;
+  }
+
+  .contacts-content {
+    flex-direction: column !important; /* Сначала карточка, под ней карта */
+    gap: 20px !important;
+    padding: 0 16px !important;
+  }
+
+  .contacts-info-card {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 24px !important;
+  }
+
+  .contacts-map-box {
+    width: 100% !important;
+    height: 300px !important; /* Ограничиваем высоту карты на мобилках */
+  }
+
+  /* 9. ПОДВАЛ (ФУТЕР) */
+  .main-footer {
+    padding: 40px 16px !important;
+  }
+
+  .footer-container {
+    flex-direction: column !important; /* Выстраиваем колонки футера друг под другом */
+    gap: 32px !important;
+    align-items: flex-start !important;
+  }
+
+  .footer-info {
+    max-width: 100% !important;
+  }
+
+  /* 10. КВИЗ-МОДАЛКА И СЕТКА БРЕНДОВ */
+  .quiz-card {
+    padding: 24px !important; /* Сужаем внутренние поля, чтобы квиз влезал в экран */
+    margin: 10px !important;
+  }
+
+  .quiz-step h3 {
+    font-size: 20px !important;
+  }
+
+  /* Сетка брендов: на мобилках переключаем с 4 колонок на 2 для удобного тапа пальцем */
+  .brands-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
   }
 }
-/* АДАПТИВНОСТЬ */
-@media (max-width: 1200px) { .services-grid { grid-template-columns: repeat(4, 1fr); } }
-@media (max-width: 768px) { 
-  .services-grid { grid-template-columns: repeat(2, 1fr); }
-  .top-contacts { display: none; }
-  body { padding-top: 70px; }
-  .services-dropdown { top: 70px; max-height: calc(100vh - 70px); }
-  .main-nav { padding: 12px 20px; }
-  .hero-section { padding: 20px; }
-  .hero-content h1 { font-size: 32px; }
+
+/* ДОПОЛНИТЕЛЬНЫЙ СБРОС НА СОВСЕМ УЗКИХ СМАРТФОНАХ (меньше 400px) */
+@media (max-width: 400px) {
+  .catalog-grid, .services-grid {
+    grid-template-columns: 1fr !important; /* Карточки каталога встают по одной в ряд */
+  }
+}
+  /* ==========================================
+     ИСПРАВЛЕННЫЙ ЛАКОНИЧНЫЙ КРЕСТИК ЗАКРЫТИЯ
+     ========================================== */
+
+  /* Сбрасываем ошибочные стили со всех обычных кнопок в шторке */
+  .services-dropdown button,
+  #services-panel button {
+    position: static;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    border: none;
+    background: transparent;
+  }
+
+  /* Стилизуем строго конкретную кнопку закрытия по её классу */
+  #services-panel .close-services-menu,
+  .services-dropdown .close-services-menu {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 36px !important;      /* Сделали меньше и лаконичнее */
+    height: 36px !important;
+    z-index: 1000000 !important; /* Поверх всего */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: #FFFFFF !important; /* Чистый белый круг */
+    border: 1px solid rgba(10, 92, 54, 0.2) !important; /* Тонкий аккуратный ободок */
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    font-size: 0 !important;     /* Прячем стандартный текстовый '✕' из HTML */
+  }
+
+  /* Аккуратные тонкие линии крестика */
+  #services-panel .close-services-menu::before,
+  #services-panel .close-services-menu::after,
+  .services-dropdown .close-services-menu::before,
+  .services-dropdown .close-services-menu::after {
+    content: "" !important;
+    position: absolute !important;
+    width: 14px !important;      /* Оптимальная длина линий */
+    height: 1.5px !important;    /* Сделали линии тоньше */
+    background-color: var(--text-dark) !important;
+  }
+  #services-panel .close-services-menu::before, .services-dropdown .close-services-menu::before {
+    transform: rotate(45deg) !important;
+  }
+  #services-panel .close-services-menu::after, .services-dropdown .close-services-menu::after {
+    transform: rotate(-45deg) !important;
+  }
+
+  /* ==========================================
+     ВОЗВРАЩАЕМ КНОПКИ ФИЛЬТРАЦИИ НА МЕСТО
+     ========================================== */
+  
+  /* Контейнер для кнопок «Все», «Компьютеры» выстраиваем строго вертикально */
+  .services-dropdown .tabs-container,
+  #services-panel .tabs-container {
+    display: flex !important;
+    flex-direction: column !important; 
+    gap: 8px !important;
+    width: 100% !important;
+    padding: 0 16px !important;
+    margin-bottom: 24px !important;
+    margin-top: 0 !important;
+  }
+
+  /* Сами кнопки переключателей внутри шторки */
+  .services-dropdown .tabs-container .tab-btn,
+  #services-panel .tabs-container .tab-btn {
+    display: block !important;
+    width: 100% !important;
+    background: rgba(10, 92, 54, 0.06) !important;
+    padding: 12px 22px !important;
+    border-radius: 20px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: var(--text-dark) !important;
+    text-align: center !important;
+  }
+
+  /* Стили для активной кнопки фильтра на мобильном */
+  .services-dropdown .tabs-container .tab-btn.active,
+  #services-panel .tabs-container .tab-btn.active {
+    background: var(--bg-card) !important;
+    color: var(--accent-green) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+  }
+   .overlay-menu {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 2000000 !important; /* Поднимаем НАД шапкой сайта, чтобы ничего не перекрывалось */
+    background: rgba(242, 244, 243, 0.98) !important; /* Плотный чистый фон */
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    padding: 80px 24px 40px 24px !important; /* Большой отступ сверху, чтобы опустить кнопки из зоны шапки */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important; /* Центрируем все элементы */
+    justify-content: flex-start !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Исправляем положение и видимость родного крестика */
+  .overlay-menu .btn-close {
+    position: fixed !important; /* Фиксируем строго в углу экрана */
+    top: 16px !important;
+    right: 16px !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-light) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 2000005 !important; /* Выше самого оверлея */
+    margin: 0 !important;
+  }
+
+  /* Ссылка-контейнер для мобильных пунктов */
+  .menu-links {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important; /* Выравниваем по центру */
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 320px !important; /* Ограничиваем общую ширину стопки */
+    margin: 0 auto !important;
+  }
+
+  /* Выравниваем и растягиваем сами кнопки-капсулы */
+  .menu-item {
+    width: 100% !important; /* Капсулы станут одинаковой красивой ширины */
+    text-align: center !important;
+    padding: 14px 24px !important;
+    font-size: 15px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+  /* ==========================================
+   ПОЛНОЕ ИСПРАВЛЕНИЕ СТРЕЛОК СЛАЙДЕРА ОТЗЫВОВ
+   ========================================== */
+
+/* 1. Сбрасываем жесткое абсолютное позиционирование, которое разносило блок */
+.slider-controls {
+  position: relative !important;
+  display: flex !important;
+  justify-content: center !important; /* Центрируем всю конструкцию */
+  align-items: center !important;
+  gap: 16px !important;              /* Комфортный отступ между стрелками и точками */
+  width: 100% !important;
+  max-width: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  margin: 20px auto 0 auto !important;
+  padding: 0 16px !important;
+  box-sizing: border-box !important;
+}
+
+/* 2. Намертво фиксируем круглую форму для обеих стрелок */
+.slider-controls .slider-arrow {
+  position: static !important;        /* Отменяем абсолютные сдвиги отдельных стрелок */
+  width: 40px !important;            /* Идеальный аккуратный размер под мобильный и десктоп */
+  height: 40px !important;
+  flex: 0 0 40px !important;         /* Жестко запрещаем сжиматься или растягиваться */
+  border-radius: 50% !important;     /* Делаем строгий ровный круг */
+  
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  background-color: #FFFFFF !important; /* Белая плотная подложка */
+  border: 1px solid var(--border-light) !important;
+  color: var(--accent-green) !important;
+  cursor: pointer !important;
+  padding: 0 !important;             /* Убираем внутренние отступы, центрируем иконку */
+  font-size: 14px !important;
+  box-shadow: 0 4px 10px rgba(10, 92, 54, 0.04) !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Эффект наведения */
+.slider-controls .slider-arrow:hover {
+  background-color: var(--accent-green) !important;
+  color: #FFFFFF !important;
+  border-color: var(--accent-green) !important;
+}
+
+/* 3. Контейнер с точками сжимаем, чтобы он стоял строго посередине между стрелками */
+.slider-dots {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin: 0 !important;              /* Обнуляем внешние отступы */
 }

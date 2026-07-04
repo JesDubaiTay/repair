@@ -33,52 +33,22 @@
     </nav>
   </header>
 
-  <!-- ВЫПАДАЮЩАЯ ПАНЕЛЬ С УСЛУГАМИ (Поверх контента) -->
+<!-- ВЫПАДАЮЩАЯ ПАНЕЛЬ С УСЛУГАМИ (Поверх контента) -->
   <div id="services-panel" class="services-dropdown">
     <div class="services-container">
       <div class="tabs-container">
         <button class="tab-btn active" onclick="filterServices('all', this)">Все</button>
-        <button class="tab-btn" onclick="filterServices('appliances', this)">Бытовая техника</button>
         <button class="tab-btn" onclick="filterServices('computers', this)">Компьютеры</button>
+        <button class="tab-btn" onclick="filterServices('tv', this)">ТВ и Аудио</button>
+        <button class="tab-btn" onclick="filterServices('appliances', this)">Бытовая техника</button>
+        <button class="tab-btn" onclick="filterServices('tools', this)">Инструменты и платы</button>
       </div>
 
       <div class="services-grid">
-        <!-- Бытовая техника -->
-        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт электроплит')">
-          <div class="card-badge"><span class="dot"></span> от 800 руб.</div>
-          <div class="image-placeholder"></div>
-          <div class="card-title">Ремонт электроплит</div>
-        </div>
-        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт холодильников')">
-          <div class="card-badge"><span class="dot"></span> от 1000 руб.</div>
-          <div class="image-placeholder"></div>
-          <div class="card-title">Ремонт холодильников</div>
-        </div>
-        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт стиральных машин')">
-          <div class="card-badge"><span class="dot"></span> от 1000 руб.</div>
-          <div class="image-placeholder"></div>
-          <div class="card-title">Ремонт стиральных машин</div>
-        </div>
-        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт духовых шкафов')">
-          <div class="card-badge"><span class="dot"></span> от 800 руб.</div>
-          <div class="image-placeholder"></div>
-          <div class="card-title">Ремонт духовых шкафов</div>
-        </div>
-        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт варочных панелей')">
-          <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
-          <div class="image-placeholder"></div>
-          <div class="card-title">Ремонт варочных панелей</div>
-        </div>
-        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт посудомоечных машин')">
-          <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
-          <div class="image-placeholder"></div>
-          <div class="card-title">Ремонт посудомоечных машин</div>
-        </div>
-
         <!-- Компьютеры -->
         <div class="service-card" data-category="computers" onclick="selectDeviceType('Ремонт компьютеров')">
           <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
-          <div class="image-placeholder"></div>
+          <div class="image-placeholder"><!-- Сюда потом встанет тег img --></div>
           <div class="card-title">Ремонт компьютеров</div>
         </div>
         <div class="service-card" data-category="computers" onclick="selectDeviceType('Ремонт ноутбуков')">
@@ -86,10 +56,51 @@
           <div class="image-placeholder"></div>
           <div class="card-title">Ремонт ноутбуков</div>
         </div>
-        <div class="service-card" data-category="computers" onclick="selectDeviceType('Восстановление данных')">
-          <div class="card-badge"><span class="dot"></span> от 900 руб.</div>
+        <div class="service-card" data-category="computers" onclick="selectDeviceType('Ремонт игровых приставок')">
+          <div class="card-badge"><span class="dot"></span> от 600 руб.</div>
           <div class="image-placeholder"></div>
-          <div class="card-title">Восстановление данных</div>
+          <div class="card-title">Ремонт игровых приставок</div>
+        </div>
+
+        <!-- ТВ и Аудио -->
+        <div class="service-card" data-category="tv" onclick="selectDeviceType('Ремонт телевизоров')">
+          <div class="card-badge"><span class="dot"></span> от 800 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт телевизоров</div>
+        </div>
+        <div class="service-card" data-category="tv" onclick="selectDeviceType('Ремонт ресиверов')">
+          <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт ресиверов</div>
+        </div>
+
+        <!-- Бытовая техника -->
+        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт микроволновок')">
+          <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт микроволновок</div>
+        </div>
+        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт отпаривателей')">
+          <div class="card-badge"><span class="dot"></span> от 600 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт отпаривателей</div>
+        </div>
+        <div class="service-card" data-category="appliances" onclick="selectDeviceType('Ремонт пылесосов и роботов-пылесосов')">
+          <div class="card-badge"><span class="dot"></span> от 700 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт пылесосов и роботов-пылесосов</div>
+        </div>
+
+        <!-- Инструменты и платы -->
+        <div class="service-card" data-category="tools" onclick="selectDeviceType('Ремонт электроинструмента')">
+          <div class="card-badge"><span class="dot"></span> от 600 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт электроинструмента</div>
+        </div>
+        <div class="service-card" data-category="tools" onclick="selectDeviceType('Ремонт плат и блоков питания')">
+          <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
+          <div class="image-placeholder"></div>
+          <div class="card-title">Ремонт плат и blocks питания</div>
         </div>
       </div>
     </div>
@@ -161,57 +172,22 @@
     
     <!-- Дублируем табы. Передаем 'all_cat', 'appliances_cat' и 'computers_cat', 
          чтобы фильтр на странице работал отдельно от фильтра в шапке -->
-    <div class="tabs-container">
-      <button class="tab-btn cat-tab active" onclick="filterCatalog('all_cat', this)">Все</button>
-      <button class="tab-btn cat-tab" onclick="filterCatalog('appliances_cat', this)">Бытовая техника</button>
-      <button class="tab-btn cat-tab" onclick="filterCatalog('computers_cat', this)">Компьютеры</button>
-    </div>
+<div class="tabs-container">
+  <button class="tab-btn cat-tab active" onclick="filterCatalog('all_cat', this)">Все</button>
+  <button class="tab-btn cat-tab" onclick="filterCatalog('computers_cat', this)">Компьютеры</button>
+  <button class="tab-btn cat-tab" onclick="filterCatalog('tv_cat', this)">ТВ и Аудио</button>
+  <button class="tab-btn cat-tab" onclick="filterCatalog('appliances_cat', this)">Бытовая техника</button>
+  <button class="tab-btn cat-tab" onclick="filterCatalog('tools_cat', this)">Инструменты и платы</button>
+</div>
   </div>
 
   <!-- Сетка карточек (Они крупнее, чем в шапке, по 4 штуки в ряд на десктопе) -->
   <div class="catalog-grid">
     
-    <!-- БЫТОВАЯ ТЕХНИКА -->
-    <div class="catalog-card" data-catalog-cat="appliances_cat" onclick="selectDeviceType('Ремонт электроплит')">
-      <div class="card-badge"><span class="dot"></span> от 800 руб.</div>
-      <div class="image-placeholder"><!-- Сюда потом встанет тег img --></div>
-      <div class="card-title">Ремонт электроплит</div>
-    </div>
-
-    <div class="catalog-card" data-catalog-cat="appliances_cat" onclick="selectDeviceType('Ремонт холодильников')">
-      <div class="card-badge"><span class="dot"></span> от 1000 руб.</div>
-      <div class="image-placeholder"></div>
-      <div class="card-title">Ремонт холодильников</div>
-    </div>
-
-    <div class="catalog-card" data-catalog-cat="appliances_cat" onclick="selectDeviceType('Ремонт стиральных машин')">
-      <div class="card-badge"><span class="dot"></span> от 1000 руб.</div>
-      <div class="image-placeholder"></div>
-      <div class="card-title">Ремонт стиральных машин</div>
-    </div>
-
-    <div class="catalog-card" data-catalog-cat="appliances_cat" onclick="selectDeviceType('Ремонт духовых шкафов')">
-      <div class="card-badge"><span class="dot"></span> от 800 руб.</div>
-      <div class="image-placeholder"></div>
-      <div class="card-title">Ремонт духовых шкафов</div>
-    </div>
-    
-    <div class="catalog-card" data-catalog-cat="appliances_cat" onclick="selectDeviceType('Ремонт варочных панелей')">
-      <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
-      <div class="image-placeholder"></div>
-      <div class="card-title">Ремонт варочных панелей</div>
-    </div>
-
-    <div class="catalog-card" data-catalog-cat="appliances_cat" onclick="selectDeviceType('Ремонт посудомоечных машин')">
-      <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
-      <div class="image-placeholder"></div>
-      <div class="card-title">Ремонт посудомоечных машин</div>
-    </div>
-
-    <!-- КОМПЬЮТЕРЫ -->
+    <!-- КОМПЬЮТЕРЫ И ЦИФРОВАЯ ТЕХНИКА -->
     <div class="catalog-card" data-catalog-cat="computers_cat" onclick="selectDeviceType('Ремонт компьютеров')">
       <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
-      <div class="image-placeholder"></div>
+      <div class="image-placeholder"><!-- Сюда потом встанет тег img --></div>
       <div class="card-title">Ремонт компьютеров</div>
     </div>
 
@@ -221,10 +197,55 @@
       <div class="card-title">Ремонт ноутбуков</div>
     </div>
 
-    <div class="catalog-card" data-catalog-cat="computers_cat" onclick="selectDeviceType('Восстановление данных')">
-      <div class="card-badge"><span class="dot"></span> от 900 руб.</div>
+    <div class="catalog-card" data-catalog-cat="computers_cat" onclick="selectDeviceType('Ремонт игровых приставок')">
+      <div class="card-badge"><span class="dot"></span> от 600 руб.</div>
       <div class="image-placeholder"></div>
-      <div class="card-title">Восстановление данных</div>
+      <div class="card-title">Ремонт игровых приставок</div>
+    </div>
+
+    <!-- ТВ И АУДИОТЕХНИКА -->
+    <div class="catalog-card" data-catalog-cat="tv_cat" onclick="selectDeviceType('Ремонт телевизоров')">
+      <div class="card-badge"><span class="dot"></span> от 800 руб.</div>
+      <div class="image-placeholder"></div>
+      <div class="card-title">Ремонт телевизоров</div>
+    </div>
+
+    <div class="catalog-card" data-catalog-cat="tv_cat" onclick="selectDeviceType('Ремонт ресиверов')">
+      <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
+      <div class="image-placeholder"></div>
+      <div class="card-title">Ремонт ресиверов</div>
+    </div>
+
+    <!-- БЫТОВАЯ ТЕХНИКА -->
+    <div class="catalog-card" data-catalog-cat="appliances_cat" onclick="selectDeviceType('Ремонт микроволновок')">
+      <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
+      <div class="image-placeholder"></div>
+      <div class="card-title">Ремонт микроволновок</div>
+    </div>
+
+    <div class="catalog-card" data-catalog-cat="appliances_cat" onclick="selectDeviceType('Ремонт отпаривателей')">
+      <div class="card-badge"><span class="dot"></span> от 600 руб.</div>
+      <div class="image-placeholder"></div>
+      <div class="card-title">Ремонт отпаривателей</div>
+    </div>
+
+    <div class="catalog-card" data-catalog-cat="appliances_cat" onclick="selectDeviceType('Ремонт пылесосов и роботов-пылесосов')">
+      <div class="card-badge"><span class="dot"></span> от 700 руб.</div>
+      <div class="image-placeholder"></div>
+      <div class="card-title">Ремонт пылесосов и роботов-пылесосов</div>
+    </div>
+
+    <!-- ИНСТРУМЕНТ И КОМПОНЕНТЫ -->
+    <div class="catalog-card" data-catalog-cat="tools_cat" onclick="selectDeviceType('Ремонт электроинструмента')">
+      <div class="card-badge"><span class="dot"></span> от 600 руб.</div>
+      <div class="image-placeholder"></div>
+      <div class="card-title">Ремонт электроинструмента</div>
+    </div>
+
+    <div class="catalog-card" data-catalog-cat="tools_cat" onclick="selectDeviceType('Ремонт плат и блоков питания')">
+      <div class="card-badge"><span class="dot"></span> от 500 руб.</div>
+      <div class="image-placeholder"></div>
+      <div class="card-title">Ремонт плат и блоков питания</div>
     </div>
 
   </div>

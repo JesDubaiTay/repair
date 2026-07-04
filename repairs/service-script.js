@@ -52,26 +52,62 @@ function filterServices(category, buttonElement) {
 }
 
 // Выбор конкретной услуги из шторки
+// ОБНОВЛЕННАЯ ФУНКЦИЯ В КОРНЕВОМ SCRIPT.JS (НА ГЛАВНОЙ СТРАНИЦЕ)
 function selectDeviceType(typeName) {
-  draftOrder.deviceType = typeName;
-  console.log("Черновик обновлен (Тип техники):", draftOrder);
-  toggleServicesMenu(); // Закрываем шторку
+  // 1. Сохраняем черновик и тип техники в память браузера
+  if (typeof draftOrder !== 'undefined') {
+    draftOrder.deviceType = typeName;
+    console.log("Черновик обновлен на главной:", draftOrder);
+  }
   
-  // 1. Сохраняем выбранный тип техники в память браузера, чтобы не потерять при переходе
+  // Сохраняем маркер для автоскролла/автозапуска на новой странице
   localStorage.setItem('selectedDeviceType', typeName);
 
-  // 2. Проверяем, создана ли уже отдельная страница под эту технику
-  if (typeName === 'Ремонт компьютеров') {
-      window.location.href = 'repairs/kompyutery.html';
-      return;
+  // Закрываем меню (если функция toggleServicesMenu существует на главной)
+  if (typeof toggleServicesMenu === "function") toggleServicesMenu();
+
+  // 2. ПЕРЕНАПРАВЛЕНИЕ НА СООТВЕТСТВУЮЩУЮ СТРАНИЦУ
+  switch (typeName) {
+    case 'Ремонт компьютеров':
+      window.location.href = 'kompyutery.html';
+      break;
+    case 'Ремонт ноутбуков':
+      window.location.href = 'noutbuki.html';
+      break;
+    case 'Ремонт игровых приставок':
+      window.location.href = 'pristavki.html';
+      break;
+    case 'Ремонт телевизоров':
+      window.location.href = 'televizory.html';
+      break;
+    case 'Ремонт ресиверов':
+      window.location.href = 'resiveri.html';
+      break;
+    case 'Ремонт микроволновок':
+      window.location.href = 'mikrovolnovki.html';
+      break;
+    case 'Ремонт отпаривателей':
+      window.location.href = 'otparivateli.html';
+      break;
+    case 'Ремонт пылесосов и роботов-пылесосов':
+      window.location.href = 'pylesosy.html';
+      break;
+    case 'Ремонт электроинструмента':
+      window.location.href = 'elektroinstrument.html';
+      break;
+    case 'Ремонт плат и блоков питания':
+      window.location.href = 'platy-i-bp.html';
+      break;
+      
+    default:
+      // Логика заглушки на случай, если название карточки не совпало
+      alert(`Выбран ремонт: ${typeName}. Логика квиза сработает здесь.`);
   }
-  // Если для какой-то техники страницы еще нет, оставляем вашу старую логику заглушки
-  alert(`Выбран ремонт: ${typeName}. Логика квиза сработает здесь.`);
 }
 
-// ИСПРАВЛЕННАЯ ФУНКЦИЯ ДЛЯ ВСПЛЫВАЮЩЕГО ОКНА ИЗ ИНПУТА ПК
+// ОДНА УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ДЛЯ ВСЕХ СТРАНИЦ ТЕХНИКИ
 function startQuizFromHero() {
-  // 1. Забираем текст из инпута на главном экране страницы ПК
+  // 1. Забираем текст из инпута на главном экране
   const heroInput = document.getElementById('initial-problem');
   if (!heroInput) return;
 
@@ -82,13 +118,36 @@ function startQuizFromHero() {
     return;
   }
 
-  // 2. Записываем текст в глобальный объект квиза
+  // --- АВТОМАТИЧЕСКОЕ ОПРЕДЕЛЕНИЕ РАЗДЕЛА ---
+  // Смотрим, какой html-файл сейчас открыт в браузере
+  const currentFile = window.location.pathname.split('/').pop();
+
+  // Карта настроек для каждой страницы: [Тип техники для базы, Название раздела для source]
+  const pageConfigs = {
+    'kompyutery.html':          ['Ремонт компьютеров', 'компьютеры'],
+    'noutbuki.html':            ['Ремонт ноутбуков', 'ноутбуки'],
+    'pristavki.html':           ['Ремонт игровых приставок', 'игровые приставки'],
+    'televizory.html':          ['Ремонт телевизоров', 'телевизоры'],
+    'resiveri.html':            ['Ремонт ресиверов', 'ресиверы'],
+    'mikrovolnovki.html':       ['Ремонт микроволновок', 'микроволновки'],
+    'otparivateli.html':        ['Ремонт отпаривателей', 'отпариватели'],
+    'pylesosy.html':            ['Ремонт пылесосов и роботов-пылесосов', 'пылесосы'],
+    'elektroinstrument.html':   ['Ремонт электроинструмента', 'электроинструменты'],
+    'platy-i-bp.html':          ['Ремонт плат и блоков питания', 'платы и БП']
+  };
+
+  // Получаем настройки для текущей страницы. Если совпадений нет — ставим дефолт.
+  const [detectedDevice, detectedSection] = pageConfigs[currentFile] || ['Ремонт компьютеров', 'компьютеры'];
+  // ------------------------------------------
+
+  // 2. Записываем динамические данные в глобальный объект квиза
   quizDraftOrder.initialProblem = problemText;
-  quizDraftOrder.deviceType = "Ремонт компьютеров";
+  quizDraftOrder.deviceType = detectedDevice; // Сюда уйдет правильный тип (например, "Ремонт микроволновок")
   
-  // Переписываем источник для Supabase, чтобы знать, что лид пришел именно из строки ввода
-  quizDraftOrder.source = "Инпут на первом экране, раздел компьютеры"; 
-  console.log("Проблема зафиксирована:", quizDraftOrder.initialProblem);
+  // Автоматически соберет: "Инпут на первом экране, раздел микроволновки"
+  quizDraftOrder.source = `Инпут на первом экране, раздел ${detectedSection}`; 
+  
+  console.log(`Фиксация для раздела [${detectedSection}]:`, quizDraftOrder);
 
   // 3. Синхронизируем текст с textarea ВСПЛЫВАЮЩЕГО (popup) квиза
   const popupTextarea = document.getElementById('popup-quiz-problem-textarea');
@@ -105,13 +164,10 @@ function startQuizFromHero() {
   }
 
   // 5. Переключаем всплывающий квиз сразу на Шаг 1 (Выбор бренда)
-  // Пользователь сначала выберет бренд (ASUS, HP и т.д.), кликнет на него,
-  // и квиз перекинет его на Шаг 2, где уже будет красиво лежать слово "Комп"
   if (typeof changePopupQuizStep === "function") {
     changePopupQuizStep(1); 
   }
 }
-
 
 // Управление бургер-меню
 function openBurgerMenu() {
@@ -187,14 +243,34 @@ function goToSlide(index) {
 // УПРАВЛЕНИЕ МОДАЛЬНЫМ МИНИ-КВИЗОМ (ИЗ БЛОКА ПОЛОМОК)
 // ==========================================================================
 
+// УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ДЛЯ ОТКРЫТИЯ КВИЗА ИЗ БЛОКА ПОЛОМОК
 function openQuizPopupModal() {
+  // --- АВТОМАТИЧЕСКОЕ ОПРЕДЕЛЕНИЕ РАЗДЕЛА ---
+  const currentFile = window.location.pathname.split('/').pop();
+
+  const pageConfigs = {
+    'kompyutery.html':          ['Ремонт компьютеров', 'компьютеры'],
+    'noutbuki.html':            ['Ремонт ноутбуков', 'ноутбуки'],
+    'pristavki.html':           ['Ремонт игровых приставок', 'игровые приставки'],
+    'televizory.html':          ['Ремонт телевизоров', 'телевизоры'],
+    'resiveri.html':            ['Ремонт ресиверов', 'ресиверы'],
+    'mikrovolnovki.html':       ['Ремонт микроволновок', 'микроволновки'],
+    'otparivateli.html':        ['Ремонт отпаривателей', 'отпариватели'],
+    'pylesosy.html':            ['Ремонт пылесосов и роботов-пылесосов', 'пылесосы'],
+    'elektroinstrument.html':   ['Ремонт электроинструмента', 'электроинструменты'],
+    'platy-i-bp.html':          ['Ремонт плат и блоков питания', 'платы и БП']
+  };
+
+  const [detectedDevice, detectedSection] = pageConfigs[currentFile] || ['Ремонт компьютеров', 'компьютеры'];
+  // ------------------------------------------
+
   // Фиксируем точный кастомный источник для вашей таблицы orders
-  quizDraftOrder.deviceType = "Ремонт компьютеров";
-  quizDraftOrder.source = "Кнопка в блоке поломок, раздел компьютеры";
+  quizDraftOrder.deviceType = detectedDevice;
+  quizDraftOrder.source = `Кнопка в блоке поломок, раздел ${detectedSection}`;
   console.log("Источник зафиксирован для всплывающего квиза:", quizDraftOrder.source);
 
   // Сбрасываем попап-квиз на 1 шаг перед открытием
-  changePopupQuizStep(1);
+  if (typeof changePopupQuizStep === "function") changePopupQuizStep(1);
   if (document.getElementById('popup-quiz-problem-textarea')) document.getElementById('popup-quiz-problem-textarea').value = '';
   if (document.getElementById('popup-quiz-name')) document.getElementById('popup-quiz-name').value = '';
   if (document.getElementById('popup-quiz-phone')) document.getElementById('popup-quiz-phone').value = '';
@@ -302,7 +378,7 @@ async function sendPopupQuizToSupabase() {
 
 // НАЙДИТЕ ЭТОТ БЛОК В САМОМ НИЗУ СВОЕГО service-script.js И ЗАМЕНИТЕ НА ЭТОТ:
 document.addEventListener("DOMContentLoaded", () => {
-  // Свайпы для отзывов (вызов initReviewsSlider удален, чтобы не вешать скрипт!)
+  // Свайпы для отзывов (логика полностью сохранена)
   const viewport = document.querySelector('.slider-viewport');
   if (viewport) {
     let touchStartX = 0;
@@ -324,14 +400,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { passive: true });
   }
 
-  // Автоматический подхват при переходе с главной страницы
+  // АВТОМАТИЧЕСКИЙ ПОДХВАТ ПРИ ПЕРЕХОДЕ С ГЛАВНОЙ СТРАНИЦЫ (ТЕПЕРЬ УНИВЕРСАЛЬНЫЙ)
   const savedType = localStorage.getItem('selectedDeviceType');
-  if (savedType === 'Ремонт компьютеров') {
-    localStorage.removeItem('selectedDeviceType');
-    
-    quizDraftOrder.source = "Поиск на главной, раздел компьютеры";
-    quizDraftOrder.deviceType = "Ремонт компьютеров";
-    console.log("Пользователь перешел с поиска главной. Источник квиза:", quizDraftOrder.source);
+  
+  if (savedType) {
+    // Получаем имя текущего HTML-файла (например, "mikrovolnovki.html")
+    const currentFile = window.location.pathname.split('/').pop();
+
+    // Карта настроек для правильного формирования источника source
+    const pageConfigs = {
+      'kompyutery.html':          'компьютеры',
+      'noutbuki.html':            'ноутбуки',
+      'pristavki.html':           'игровые приставки',
+      'televizory.html':          'телевизоры',
+      'resiveri.html':            'ресиверы',
+      'mikrovolnovki.html':       'микроволновки',
+      'otparivateli.html':        'отпариватели',
+      'pylesosy.html':            'пылесосы',
+      'elektroinstrument.html':   'электроинструменты',
+      'platy-i-bp.html':          'платы и БП'
+    };
+
+    const detectedSection = pageConfigs[currentFile];
+
+    // Если раздел для текущего файла найден в списке, фиксируем данные
+    if (detectedSection) {
+      localStorage.removeItem('selectedDeviceType'); // Очищаем временную память браузера
+      
+      quizDraftOrder.deviceType = savedType; // Записываем точный тип техники
+      quizDraftOrder.source = `Поиск на главной, раздел ${detectedSection}`; // Формируем точный source
+      
+      console.log(`Пользователь перешел с поиска главной. Раздел [${detectedSection}]. Данные квиза:`, quizDraftOrder);
+    }
   }
 });
 
@@ -492,11 +592,32 @@ async function sendQuizToSupabase() {
     submitBtn.disabled = false;
   }
 }
-// Открытие модального окна из Прайс-листа
+// УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ОТКРЫТИЯ МОДАЛКИ ИЗ ПРАЙС-ЛИСТА
 function openQuizFromPrice() {
+  // --- АВТОМАТИЧЕСКОЕ ОПРЕДЕЛЕНИЕ РАЗДЕЛА ---
+  const currentFile = window.location.pathname.split('/').pop();
+
+  const pageConfigs = {
+    'kompyutery.html':          ['Ремонт компьютеров', 'компьютеры'],
+    'noutbuki.html':            ['Ремонт ноутбуков', 'ноутбуки'],
+    'pristavki.html':           ['Ремонт игровых приставок', 'игровые приставки'],
+    'televizory.html':          ['Ремонт телевизоров', 'телевизоры'],
+    'resiveri.html':            ['Ремонт ресиверов', 'ресиверы'],
+    'mikrovolnovki.html':       ['Ремонт микроволновок', 'микроволновки'],
+    'otparivateli.html':        ['Ремонт отпаривателей', 'отпариватели'],
+    'pylesosy.html':            ['Ремонт пылесосов и роботов-пылесосов', 'пылесосы'],
+    'elektroinstrument.html':   ['Ремонт электроинструмента', 'электроинструменты'],
+    'platy-i-bp.html':          ['Ремонт плат и блоков питания', 'платы и БП']
+  };
+
+  const [detectedDevice, detectedSection] = pageConfigs[currentFile] || ['Ремонт компьютеров', 'компьютеры'];
+  // ------------------------------------------
+
   // 1. Фиксируем данные в объекте простых форм draftOrder
-  draftOrder.deviceType = "Ремонт компьютеров";
-  draftOrder.source = "Узнать стоимость ремонта, раздел компьютеры"; // Наш точный источник
+  draftOrder.deviceType = detectedDevice;
+  draftOrder.source = `Узнать стоимость ремонта, раздел ${detectedSection}`; // Формируем точный source
+
+  console.log("Источник зафиксирован из прайс-листа:", draftOrder);
 
   // 2. Показываем модальное окно
   const priceModal = document.getElementById('price-callback-modal');
@@ -551,20 +672,20 @@ async function sendPriceLeadToSupabase() {
       source: draftOrder.source
     });
 
-    // ШЛЁМ СТРОГО В ТАБЛИЦУ 'ORDERS' С РОДНЫМИ НАЗВАНИЯМИ СТОЛБЦОВ
+        // ШЛЁМ СТРОГО В ТАБЛИЦУ 'ORDERS' С РОДНЫМИ НАЗВАНИЯМИ СТОЛБЦОВ
     const { data, error } = await supabase
       .from('orders') // Ваша единая таблица для всех заявок сайта
       .insert([
         { 
           client_name: validName, 
           client_phone: phoneInp,
-          device_type: draftOrder.deviceType || "Ремонт компьютеров", 
+          device_type: draftOrder.deviceType || "Не указан", 
           
           // Спасаем от ошибки NOT NULL: пишем понятный текст поломки для мастера
           initial_problem: "Быстрая заявка: клиент хочет узнать стоимость ремонта по телефону.",
           
-          // Передаем точный источник для сквозной аналитики
-          source: draftOrder.source || "Узнать стоимость ремонта, раздел компьютеры"
+          // Безопасный источник: если draftOrder.source пустой, запишет просто "Форма стоимости"
+          source: draftOrder.source || "Узнать стоимость ремонта (запасной источник)"
         }
       ]);
 
