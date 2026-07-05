@@ -325,60 +325,69 @@ function submitPopupQuizStep2() {
   quizDraftOrder.initialProblem = textVal;
   changePopupQuizStep(3);
 }
-// Отправка данных всплывающего мини-квиза в таблицу 'orders'
-async function sendPopupQuizToSupabase() {
-  const nameInp = document.getElementById('popup-quiz-name').value.trim();
-  const phoneInp = document.getElementById('popup-quiz-phone').value.trim();
+// Универсальная отправка данных квиза в таблицу 'orders'
+async function sendPopupQuizToSupabase(config) {
+  // Находим элементы динамически по переданным ID
+  const nameInp = document.getElementById(config.nameId)?.value.trim() || "";
+  const phoneInp = document.getElementById(config.phoneId)?.value.trim() || "";
+  const submitBtn = document.getElementById(config.submitBtnId);
 
   if (nameInp === "" || phoneInp === "") {
     alert("Пожалуйста, заполните поля 'Имя' и 'Номер телефона'!");
     return;
   }
 
+  // Записываем данные в наш объект черновика
   quizDraftOrder.clientName = nameInp;
   quizDraftOrder.clientPhone = phoneInp;
 
-  const submitBtn = document.getElementById('popup-quiz-submit-btn');
   if (submitBtn) {
     submitBtn.innerText = "Отправка...";
     submitBtn.disabled = true;
   }
 
   try {
-    console.log("Отправка всплывающего мини-квиза в Supabase (Таблица orders):", quizDraftOrder);
+    console.log("Отправка квиза в Supabase (Таблица orders):", quizDraftOrder);
 
-    // Жестко синхронизируем со структурой вашей таблицы 'orders' из 4-й части кода
     const { data, error } = await supabase
-      .from('orders') // Имя вашей таблицы квизов
+      .from('orders')
       .insert([
         { 
-          client_name: quizDraftOrder.clientName, // Точное имя столбца из вашей БД
-          client_phone: quizDraftOrder.clientPhone, // Точное имя столбца из вашей БД
+          client_name: quizDraftOrder.clientName,
+          client_phone: quizDraftOrder.clientPhone,
           device_type: quizDraftOrder.deviceType || "Ремонт компьютеров",
-          initial_problem: `Бренд: ${quizDraftOrder.brand || 'Не выбран'}. Поломка (из всплывающего окна): ${quizDraftOrder.initialProblem || 'Нет описания'}`,
-          source: quizDraftOrder.source // Сюда динамически запишется точный источник!
+          initial_problem: `Бренд: ${quizDraftOrder.brand || 'Не выбран'}. Поломка: ${quizDraftOrder.initialProblem || 'Нет описания'}`,
+          // Берем источник из конфига окна или из объекта
+          source: config.source || quizDraftOrder.source 
         }
       ]);
 
     if (error) throw error; 
 
-    alert("Заявка успешно отправлена через мини-квиз! Мастер свяжется с вами.");
-    closeQuizPopupModal(); // Закрываем всплывающее окно
+    alert("Заявка успешно отправлена! Мастер свяжется с вами.");
+    
+    // Вызываем функцию закрытия конкретного окна, если она передана
+    if (typeof config.closeModalFunc === "function") {
+      config.closeModalFunc();
+    }
 
   } catch (err) {
-    console.error("Ошибка Supabase при отправке всплывающего квиза:", err);
+    console.error("Ошибка Supabase при отправке:", err);
     alert(`Ошибка Supabase: ${err.message || JSON.stringify(err)}`);
   } finally {
     if (submitBtn) {
-      submitBtn.innerText = "Отправить заявку ⚡";
+      submitBtn.innerText = config.defaultBtnText || "Отправить заявку ⚡";
       submitBtn.disabled = false;
     }
   }
 }
 
-// НАЙДИТЕ ЭТОТ БЛОК В САМОМ НИЗУ СВОЕГО service-script.js И ЗАМЕНИТЕ НА ЭТОТ:
+// ========================================================
+// ИНИЦИАЛИЗАЦИЯ И СЛУЖЕБНАЯ ЛОГИКА СТРАНИЦЫ (ФИНАЛЬНЫЙ БЛОК)
+// ========================================================
 document.addEventListener("DOMContentLoaded", () => {
-  // Свайпы для отзывов (логика полностью сохранена)
+  
+  // 1. СВАЙПЫ ДЛЯ ОТЗЫВОВ (ЛОГИКА ПОЛНОСТЬЮ СОХРАНЕНА)
   const viewport = document.querySelector('.slider-viewport');
   if (viewport) {
     let touchStartX = 0;
@@ -400,14 +409,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { passive: true });
   }
 
-  // АВТОМАТИЧЕСКИЙ ПОДХВАТ ПРИ ПЕРЕХОДЕ С ГЛАВНОЙ СТРАНИЦЫ (ТЕПЕРЬ УНИВЕРСАЛЬНЫЙ)
+  // 2. АВТОМАТИЧЕСКИЙ ПОДХВАТ ПРИ ПЕРЕХОДЕ С ГЛАВНОЙ СТРАНИЦЫ
   const savedType = localStorage.getItem('selectedDeviceType');
   
   if (savedType) {
-    // Получаем имя текущего HTML-файла (например, "mikrovolnovki.html")
     const currentFile = window.location.pathname.split('/').pop();
 
-    // Карта настроек для правильного формирования источника source
     const pageConfigs = {
       'kompyutery.html':          'компьютеры',
       'noutbuki.html':            'ноутбуки',
@@ -423,16 +430,60 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const detectedSection = pageConfigs[currentFile];
 
-    // Если раздел для текущего файла найден в списке, фиксируем данные
     if (detectedSection) {
-      localStorage.removeItem('selectedDeviceType'); // Очищаем временную память браузера
+      localStorage.removeItem('selectedDeviceType'); 
       
-      quizDraftOrder.deviceType = savedType; // Записываем точный тип техники
-      quizDraftOrder.source = `Поиск на главной, раздел ${detectedSection}`; // Формируем точный source
+      quizDraftOrder.deviceType = savedType; 
+      quizDraftOrder.source = `Поиск на главной, раздел ${detectedSection}`; 
       
       console.log(`Пользователь перешел с поиска главной. Раздел [${detectedSection}]. Данные квиза:`, quizDraftOrder);
+      
+      // Сразу открываем квиз, если это страница ПК (сохраняем логику из второго блока)
+      if (detectedSection === 'компьютеры' && typeof openQuizOrForm === "function") {
+        console.log("Пользователь перешел на страницу ПК. Автоматически запускаем квиз...");
+        openQuizOrForm();
+      }
     }
   }
+
+  // 3. АВТОНОМНАЯ РУЧНАЯ МАСКА ТЕЛЕФОНА (БЕЗ СКРИПТОВ ИЗ ИНТЕРНЕТА)
+  const phoneInputs = [
+    document.getElementById("quiz-phone"),
+    document.getElementById("popup-quiz-phone")
+  ];
+
+  phoneInputs.forEach(input => {
+    if (!input) return;
+
+    // При фокусе автоматически подставляем базовый "+7 "
+    input.addEventListener("focus", function () {
+      if (input.value === "") {
+        input.value = "+7 ";
+      }
+    });
+
+    // Форматирование номера на лету (поддерживает ввод любых кодов городов вроде 800 или 345)
+    input.addEventListener("input", function () {
+      let matrix = "+7 (___) ___-__-__",
+          i = 0,
+          def = matrix.replace(/\D/g, ""),
+          val = input.value.replace(/\D/g, "");
+
+      if (def.length >= val.length) val = def;
+
+      input.value = matrix.replace(/./g, function (a) {
+        return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i < val.length ? a : "";
+      });
+    });
+
+    // Защита: не даем пользователю стереть префикс "+7 " кнопкой Backspace
+    input.addEventListener("keydown", function (e) {
+      if (input.selectionStart <= 4 && e.key === "Backspace") {
+        e.preventDefault();
+      }
+    });
+  });
+
 });
 
 function toggleFaq(element) {
@@ -542,20 +593,38 @@ async function sendQuizToSupabase() {
   const nameInp = document.getElementById('quiz-name').value.trim();
   const phoneInp = document.getElementById('quiz-phone').value.trim();
 
+  // 1. Проверяем, что поля вообще заполнены
   if (nameInp === "" || phoneInp === "") {
     alert("Пожалуйста, заполните поля 'Имя' и 'Номер телефона'!");
     return;
   }
 
+  // 2. ГИБКАЯ ПРОВЕРКА НОМЕРА ТЕЛЕФОНА (Защита от мусора и букв)
+  // Очищаем строку от скобок, дефисов, плюсов и пробелов, оставляя только чистые цифры
+  const cleanPhone = phoneInp.replace(/\D/g, ''); 
+
+  // В России мобильный номер с кодом (7 или 8) состоит ровно из 11 цифр.
+  // Делаем проверку: если чистых цифр меньше 10 (на случай ввода без кода города), это точно спам или опечатка.
+  if (cleanPhone.length < 10) {
+    alert(" Пожалуйста, введите корректный номер телефона (минимум 10 цифр)!");
+    // Находим инпут и подсвечиваем его красным для юзабилити
+    document.getElementById('quiz-phone').style.borderColor = "#dc3545";
+    document.getElementById('quiz-phone').focus();
+    return;
+  } else {
+    // Если всё хорошо, убираем красную рамку
+    document.getElementById('quiz-phone').style.borderColor = "";
+  }
+
+  // Записываем данные в черновик (теперь у тебя в базе будут гарантированно валидные контакты)
   quizDraftOrder.clientName = nameInp;
-  quizDraftOrder.clientPhone = phoneInp;
+  quizDraftOrder.clientPhone = phoneInp; // отправляем как ввел пользователь (со скобочками из маски, если она есть)
 
   const submitBtn = document.querySelector('.quiz-submit-btn');
   submitBtn.innerText = "Отправка...";
   submitBtn.disabled = true;
 
   try {
-    // Выводим в консоль то, что пытаемся отправить, для самопроверки
     console.log("Данные перед отправкой в Supabase:", quizDraftOrder);
 
     const { data, error } = await supabase
@@ -564,7 +633,6 @@ async function sendQuizToSupabase() {
         { 
           client_name: quizDraftOrder.clientName, 
           client_phone: quizDraftOrder.clientPhone,
-          // Если эти поля пустые, временно передаем строки, чтобы не сработал NOT NULL в БД
           device_type: quizDraftOrder.deviceType || "Не указан",
           initial_problem: `Бренд: ${quizDraftOrder.brand || 'Не выбран'}. Описание: ${quizDraftOrder.initialProblem || 'Нет описания'}`,
           source: quizDraftOrder.source || "Лендинг Квиз"
@@ -572,19 +640,15 @@ async function sendQuizToSupabase() {
       ]);
 
     if (error) {
-      // Важно: генерируем ошибку так, чтобы передать весь объект ответа Supabase
       throw error; 
     }
 
     alert("Заявка успешно отправлена! Мастер свяжется с вами.");
-    resetQuizForm(); // Очищаем форму
+    resetQuizForm(); 
     closeQuizModal();
 
   } catch (err) {
-    // Внимание сюда! Смотрим полную структуру ошибки в консоли F12
     console.error("Критическая ошибка при работе с Supabase:", err);
-    
-    // Выводим подробности для пользователя/разработчика
     const errorDetails = err.message || err.details || JSON.stringify(err);
     alert(`Ошибка Supabase: ${errorDetails}`);
   } finally {
@@ -592,7 +656,9 @@ async function sendQuizToSupabase() {
     submitBtn.disabled = false;
   }
 }
+// =================================================================
 // УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ОТКРЫТИЯ МОДАЛКИ ИЗ ПРАЙС-ЛИСТА
+// =================================================================
 function openQuizFromPrice() {
   // --- АВТОМАТИЧЕСКОЕ ОПРЕДЕЛЕНИЕ РАЗДЕЛА ---
   const currentFile = window.location.pathname.split('/').pop();
@@ -634,24 +700,7 @@ function closePriceModal() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    // Проверяем, есть ли в памяти сохраненный выбор
-    const savedType = localStorage.getItem('selectedDeviceType');
-    
-    if (savedType === 'Ремонт компьютеров') {
-        console.log("Пользователь перешел на страницу ПК. Автоматически запускаем квиз...");
-        
-        // Очищаем запись, чтобы квиз не всплывал бесконечно при простой перезагрузке страницы
-        localStorage.removeItem('selectedDeviceType');
-        
-        // Вызываем функцию открытия вашего квиза (подставьте имя вашей функции, например openQuizOrForm)
-        if (typeof openQuizOrForm === "function") {
-            openQuizOrForm();
-        }
-
-    }
-});
-// ИСПРАВЛЕННАЯ ФУНКЦИЯ ОТПРАВКИ ИЗ ПРАЙС-ЛИСТА В ТАБЛИЦУ 'ORDERS'
+// ИСПРАВЛЕННАЯ ФУНКЦИЯ ОТПРАВКИ ИЗ ПРАЙС-ЛИСТА В ТАБЛИЦУ 'ORDERS' (С ПРОВЕРКОЙ ЦИФР)
 async function sendPriceLeadToSupabase() {
   const nameInp = document.getElementById('modal-callback-name').value.trim();
   const phoneInp = document.getElementById('modal-callback-phone').value.trim();
@@ -659,6 +708,22 @@ async function sendPriceLeadToSupabase() {
   if (phoneInp === "") {
     alert("Пожалуйста, введите номер телефона!");
     return;
+  }
+
+  // СТРОГАЯ ПРОВЕРКА НОМЕРА ТЕЛЕФОНА (Защита от мусора и букв)
+  const cleanPhone = phoneInp.replace(/\D/g, ''); 
+
+  if (cleanPhone.length !== 11) {
+    alert("Пожалуйста, введите полный номер телефона в формате +7 (999) 000-00-00!");
+    const phoneField = document.getElementById('modal-callback-phone');
+    if (phoneField) {
+      phoneField.style.borderColor = "#dc3545"; // Красная подсветка
+      phoneField.focus();
+    }
+    return;
+  } else {
+    const phoneField = document.getElementById('modal-callback-phone');
+    if (phoneField) phoneField.style.borderColor = ""; // Сброс красной рамки
   }
 
   // Заглушка, если имя не введено
@@ -672,25 +737,21 @@ async function sendPriceLeadToSupabase() {
       source: draftOrder.source
     });
 
-        // ШЛЁМ СТРОГО В ТАБЛИЦУ 'ORDERS' С РОДНЫМИ НАЗВАНИЯМИ СТОЛБЦОВ
+    // ШЛЁМ СТРОГО В ТАБЛИЦУ 'ORDERS' С РОДНЫМИ НАЗВАНИЯМИ СТОЛБЦОВ
     const { data, error } = await supabase
-      .from('orders') // Ваша единая таблица для всех заявок сайта
+      .from('orders') 
       .insert([
         { 
           client_name: validName, 
           client_phone: phoneInp,
           device_type: draftOrder.deviceType || "Не указан", 
-          
-          // Спасаем от ошибки NOT NULL: пишем понятный текст поломки для мастера
           initial_problem: "Быстрая заявка: клиент хочет узнать стоимость ремонта по телефону.",
-          
-          // Безопасный источник: если draftOrder.source пустой, запишет просто "Форма стоимости"
           source: draftOrder.source || "Узнать стоимость ремонта (запасной источник)"
         }
       ]);
 
     if (error) {
-      throw error; // Передаем ошибку в блок catch для разбора
+      throw error; 
     }
 
     alert("Заявка успешно отправлена! Мастер свяжется с вами.");
@@ -702,7 +763,111 @@ async function sendPriceLeadToSupabase() {
 
   } catch (err) {
     console.error("Критическая ошибка Supabase (Таблица orders):", err);
-    // Выводим подробный текст ошибки от Supabase, чтобы сразу понять, в чем дело
     alert(`Ошибка при отправке: ${err.message || JSON.stringify(err)}`);
   }
 }
+
+// ========================================================
+// ИНИЦИАЛИЗАЦИЯ И СЛУЖЕБНАЯ ЛОГИКА СТРАНИЦЫ (ФИНАЛЬНЫЙ БЛОК)
+// ========================================================
+document.addEventListener("DOMContentLoaded", () => {
+  
+  // 1. СВАЙПЫ ДЛЯ ОТЗЫВОВ (ЛОГИКА ПОЛНОСТЬЮ СОХРАНЕНА)
+  const viewport = document.querySelector('.slider-viewport');
+  if (viewport) {
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    viewport.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches.screenX;
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches.screenX;
+      
+      const swipeThreshold = 50;
+      if (touchStartX - touchEndX > swipeThreshold) {
+        moveSlider(1);  
+      } else if (touchEndX - touchStartX > swipeThreshold) {
+        moveSlider(-1); 
+      }
+    }, { passive: true });
+  }
+
+  // 2. АВТОМАТИЧЕСКИЙ ПОДХВАТ ПРИ ПЕРЕХОДЕ С ГЛАВНОЙ СТРАНИЦЫ
+  const savedType = localStorage.getItem('selectedDeviceType');
+  
+  if (savedType) {
+    const currentFile = window.location.pathname.split('/').pop();
+
+    const pageConfigs = {
+      'kompyutery.html':          'компьютеры',
+      'noutbuki.html':            'ноутбуки',
+      'pristavki.html':           'игровые приставки',
+      'televizory.html':          'телевизоры',
+      'resiveri.html':            'ресиверы',
+      'mikrovolnovki.html':       'микроволновки',
+      'otparivateli.html':        'отпариватели',
+      'pylesosy.html':            'пылесосы',
+      'elektroinstrument.html':   'электроинструменты',
+      'platy-i-bp.html':          'платы и БП'
+    };
+
+    const detectedSection = pageConfigs[currentFile];
+
+    if (detectedSection) {
+      localStorage.removeItem('selectedDeviceType'); 
+      
+      quizDraftOrder.deviceType = savedType; 
+      quizDraftOrder.source = `Поиск на главной, раздел ${detectedSection}`; 
+      
+      console.log(`Пользователь перешел с поиска главной. Раздел [${detectedSection}]. Данные квиза:`, quizDraftOrder);
+      
+      // Сразу открываем квиз, если это страница ПК
+      if (detectedSection === 'компьютеры' && typeof openQuizOrForm === "function") {
+        console.log("Пользователь перешел на страницу ПК. Автоматически запускаем квиз...");
+        openQuizOrForm();
+      }
+    }
+  }
+
+  // 3. АВТОНОМНАЯ РУЧНАЯ МАСКА ТЕЛЕФОНА (НА ВСЕ ТРИ ОКНА САЙТА)
+  const phoneInputs = [
+    document.getElementById("quiz-phone"),          // Поле обычного квиза
+    document.getElementById("popup-quiz-phone"),    // Поле всплывающего квиза
+    document.getElementById("modal-callback-phone") // Поле окна стоимости из прайса
+  ];
+
+  phoneInputs.forEach(input => {
+    if (!input) return;
+
+    // При фокусе автоматически подставляем базовый "+7 "
+    input.addEventListener("focus", function () {
+      if (input.value === "") {
+        input.value = "+7 ";
+      }
+    });
+
+    // Форматирование номера на лету (поддерживает любые коды 800, 345, 961 и тд)
+    input.addEventListener("input", function () {
+      let matrix = "+7 (___) ___-__-__",
+          i = 0,
+          def = matrix.replace(/\D/g, ""),
+          val = input.value.replace(/\D/g, "");
+
+      if (def.length >= val.length) val = def;
+
+      input.value = matrix.replace(/./g, function (a) {
+        return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i < val.length ? a : "";
+      });
+    });
+
+    // Защита: не даем пользователю стереть префикс "+7 " кнопкой Backspace
+    input.addEventListener("keydown", function (e) {
+      if (input.selectionStart <= 4 && e.key === "Backspace") {
+        e.preventDefault();
+      }
+    });
+  });
+
+}); // Конец служебного блока DOMContentLoaded

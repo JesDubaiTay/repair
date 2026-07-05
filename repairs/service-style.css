@@ -1881,4 +1881,26 @@ body {
   .footer-block h4 {
     margin-bottom: 15px !important;
   }
+    .brands-grid {
+    grid-template-columns: repeat(2, 1fr) !important; 
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  /* Помогаем кнопкам адаптироваться и переносить длинный текст */
+  .brand-select-btn {
+    width: 100% !important;
+    font-size: 13px !important; /* Чуть уменьшаем шрифт, чтобы всё влезало */
+    padding: 12px 8px !important; /* Аккуратные отступы внутри кнопки */
+    
+    /* Разрешаем тексту переноситься на новую строку */
+    white-space: normal !important; 
+    word-wrap: break-word !important;
+    
+    /* Выравниваем текст строго по центру */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
 }

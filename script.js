@@ -294,44 +294,81 @@ document.addEventListener("DOMContentLoaded", () => {
   initReviewsSlider();
 
   const viewport = document.querySelector('.slider-viewport');
-  let touchStartX = 0;
-  let touchEndX = 0;
+  if (viewport) {
+    let touchStartX = 0;
+    let touchEndX = 0;
 
-  // Фиксируем, где палец коснулся экрана
-  viewport.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-  }, { passive: true });
+    // Фиксируем, где палец коснулся экрана
+    viewport.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
 
-  // Фиксируем, где палец оторвался от экрана
-  viewport.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-  }, { passive: true });
+    // Фиксируем, где палец оторвался от экрана
+    viewport.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
 
-  // Логика определения направления свайпа
-  function handleSwipe() {
-    const swipeThreshold = 50; // Минимальная длина свайпа в пикселях
-    if (touchStartX - touchEndX > swipeThreshold) {
-      // Свайп влево — крутим вперед
-      moveSlider(1);
-    } else if (touchEndX - touchStartX > swipeThreshold) {
-      // Свайп вправо — крутим назад
-      moveSlider(-1);
+    // Логика определения направления свайпа
+    function handleSwipe() {
+      const swipeThreshold = 50; // Минимальная длина свайпа в пикселях
+      if (touchStartX - touchEndX > swipeThreshold) {
+        // Свайп влево — крутим вперед
+        moveSlider(1);
+      } else if (touchEndX - touchStartX > swipeThreshold) {
+        // Свайп вправо — крутим назад
+        moveSlider(-1);
+      }
     }
   }
-});
+
+  // ========================================================
+  // АВТОНОМНАЯ РУЧНАЯ МАСКА ТЕЛЕФОНА ДЛЯ ГЛАВНОЙ СТРАНИЦЫ
+  // ========================================================
+  const phoneInputs = [
+    document.getElementById("quiz-phone"),          // Поле главного квиза
+    document.getElementById("popup-quiz-phone"),    // На случай, если есть поп-ап
+    document.getElementById("modal-callback-phone") // На случай, если есть форма из прайса
+  ];
+
+  phoneInputs.forEach(input => {
+    if (!input) return;
+
+    // При фокусе автоматически подставляем базовый "+7 "
+    input.addEventListener("focus", function () {
+      if (input.value === "") {
+        input.value = "+7 ";
+      }
+    });
+
+    // Форматирование номера на лету (скобочки и дефисы)
+    input.addEventListener("input", function () {
+      let matrix = "+7 (___) ___-__-__",
+          i = 0,
+          def = matrix.replace(/\D/g, ""),
+          val = input.value.replace(/\D/g, "");
+
+      if (def.length >= val.length) val = def;
+
+      input.value = matrix.replace(/./g, function (a) {
+        return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i < val.length ? a : "";
+      });
+    });
+
+    // Защита: не даем пользователю стереть префикс "+7 " кнопкой Backspace
+    input.addEventListener("keydown", function (e) {
+      if (input.selectionStart <= 4 && e.key === "Backspace") {
+        e.preventDefault();
+      }
+    });
+  });
+
+}); // Конец блока DOMContentLoaded
+
 function toggleFaq(element) {
   // Проверяем, открыт ли текущий элемент
   const isOpen = element.classList.contains('active');
   
-  // (Опционально) Закрываем все остальные открытые вопросы, если нужно
-  /* 
-  document.querySelectorAll('.faq-item').forEach(item => {
-    item.classList.remove('active');
-    item.querySelector('.faq-answer').style.maxHeight = null;
-  });
-  */
-
   const answerBlock = element.querySelector('.faq-answer');
 
   if (isOpen) {
@@ -419,19 +456,39 @@ function resetQuizForm() {
   quizDraftOrder.brand = "";
   quizDraftOrder.initialProblem = "";
 }
-
 // ==========================================
-// СВЯЗЬ С SUPABASE — ОТПРАВКА ДАННЫХ В БАЗУ
+// СВЯЗЬ С SUPABASE — ОТПРАВКА ДАННЫХ В БАЗУ (КОРНЕВОЙ SCRIPT.JS)
 // ==========================================
 async function sendQuizToSupabase() {
   const nameInp = document.getElementById('quiz-name').value.trim();
   const phoneInp = document.getElementById('quiz-phone').value.trim();
 
+  // 1. Проверяем, что поля вообще заполнены
   if (nameInp === "" || phoneInp === "") {
     alert("Пожалуйста, заполните поля 'Имя' и 'Номер телефона'!");
     return;
   }
 
+  // 2. СТРОГАЯ ПРОВЕРКА НОМЕРА ТЕЛЕФОНА (Защита от мусора вроде 53435)
+  // Очищаем строку от скобок, дефисов и букв, оставляя только чистые цифры
+  const cleanPhone = phoneInp.replace(/\D/g, ''); 
+
+  // Проверяем: в правильном российском номере всегда ровно 11 цифр
+  if (cleanPhone.length !== 11) {
+    alert("Пожалуйста, введите полный номер телефона в формате +7 (999) 000-00-00!");
+    
+    const phoneField = document.getElementById('quiz-phone');
+    if (phoneField) {
+      phoneField.style.borderColor = "#dc3545"; // Подсвечиваем поле красной рамкой
+      phoneField.focus();
+    }
+    return;
+  } else {
+    const phoneField = document.getElementById('quiz-phone');
+    if (phoneField) phoneField.style.borderColor = ""; // Если всё ок, убираем рамку
+  }
+
+  // Записываем проверенные данные в глобальный объект
   quizDraftOrder.clientName = nameInp;
   quizDraftOrder.clientPhone = phoneInp;
 
