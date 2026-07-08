@@ -553,6 +553,14 @@ body {
   background: #F8FAF9;
   border-radius: 12px;
 }
+/* Магия для адаптации картинки под размеры заглушки */
+.catalog-card .image-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Картинка полностью поместится внутрь без обрезки */
+  border-radius: 12px; /* Повторяем скругление углов родительского блока */
+  display: block;
+}
 
 /* Крупный заголовок услуги */
 .catalog-card .card-title {
